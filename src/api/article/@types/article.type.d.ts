@@ -1,0 +1,13 @@
+interface IArticle {
+  id: string;
+  author_id: string;
+  author: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+export interface IArticleResponse {
+  data: IArticle[];
+}
