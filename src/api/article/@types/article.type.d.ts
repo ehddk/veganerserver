@@ -8,6 +8,11 @@ interface IArticle {
   updatedAt?: Date;
 }
 
+export interface PaginatedArticles {
+  items: IArticle[];
+  total: number;
+}
+
 export interface IArticleResponse {
   data: IArticle[];
 }

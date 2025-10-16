@@ -2,15 +2,21 @@ import { IArticle } from "./article.type";
 
 declare global {
   /**목록 조회 */
-  type getArticlesRequestPath = {};
+  type getArticlesRequestPath = {
+    limit?: number;
+    offset?: number;
+  };
   type getArticlesRequestParams = {};
   type getAticlesRequestBody = {};
   type getArticlesRequest = {
-    path?: getArticlesRequestPath;
+    path: getArticlesRequestPath;
     params?: getArticlesRequestParams;
     body?: getArticlesRequestBody;
   };
-  type getArticlesResponse = IArticle;
+  type getArticlesResponse = {
+    items: IArticle[];
+    total: number;
+  };
 
   /**상세 조회 */
   type getArticleRequestPath = {
@@ -44,16 +50,16 @@ declare global {
   type createArticleResponse = IArticle;
 
   /**수정 */
-  type updateArticleRequestPath = {};
-  type updateArticleRequestParams = { id: string };
+  type updateArticleRequestPath = { id: string };
+  type updateArticleRequestParams = {};
   type updateArticleRequestBody = {
     title: string;
     content: string;
   };
 
   type updateArticleRequest = {
-    path?: updateArticleRequestPath;
-    params: updateArticleRequestParams;
+    path: updateArticleRequestPath;
+    params?: updateArticleRequestParams;
     body: updateArticleRequestBody;
   };
 

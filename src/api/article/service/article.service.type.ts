@@ -1,9 +1,15 @@
 import { IArticle } from "../@types/article.type";
-import { ArticleResponseDTO } from "../dto/articleResponse.dto";
+import {
+  ArticleResponseDTO,
+  PaginatedArticleResponseDTO,
+} from "../dto/articleResponse.dto";
 
 export interface ArticleService {
   /**목록 조회 */
-  getArticles(): Promise<ArticleResponseDTO[]>;
+  getArticles(
+    limit: number,
+    offset: number
+  ): Promise<PaginatedArticleResponseDTO>;
 
   getArticleById(id: string): Promise<ArticleResponseDTO | null>;
 
