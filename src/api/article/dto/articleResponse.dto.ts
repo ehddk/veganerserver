@@ -1,4 +1,4 @@
-import { IArticle } from "../@types/article.type";
+import { IArticle, PaginatedArticles } from "../@types/article.type";
 
 export class ArticleResponseDTO {
   id: string;
@@ -17,5 +17,15 @@ export class ArticleResponseDTO {
     this.author = params.author;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+  }
+}
+
+export class PaginatedArticleResponseDTO {
+  items: ArticleResponseDTO[];
+  total: number;
+
+  constructor(params: PaginatedArticles) {
+    this.items = params.items;
+    this.total = params.total;
   }
 }
