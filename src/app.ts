@@ -3,6 +3,7 @@ import path from "node:path";
 import { articleRouter } from "./api/article/router/article.router";
 import errorHandler from "./api/common/middlewares/errorHandler.middleware";
 import cors from "cors";
+import { commentRouter } from "./api/comment/router/comment.router";
 const app = express();
 
 app.use(
@@ -14,9 +15,11 @@ app.use(
   })
 );
 
-app.use("/api/articles", articleRouter);
-
 app.use(express.json());
+
+app.use("/api/articles", articleRouter);
+app.use("/api/comments", commentRouter);
+
 app.listen(4000, () => {
   console.log(`Server is running on port 4000`);
 });
