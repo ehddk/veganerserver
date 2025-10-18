@@ -15,18 +15,35 @@ export default class ArticleController {
   }
   async getArticles(
     req: Request<
-      getArticlesRequest["path"],
-      getArticlesRequest["body"],
       getArticlesRequest["params"],
-      getArticlesResponse
+      getArticlesRequest["body"],
+      getArticlesResponse,
+      getArticlesRequest["path"]
     >,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const values = await this._articleService.getArticles();
+      const rawLimit = req.query.limit;
+      const rawOffset = req.query.offset;
+
+      const parsedLimit = parseInt(
+        Array.isArray(rawLimit) ? rawLimit[0] : rawLimit || "",
+        10
+      );
+      const parsedOffset = parseInt(
+        Array.isArray(rawOffset) ? rawOffset[0] : rawOffset || "",
+        10
+      );
+
+      const limit: number =
+        isNaN(parsedLimit) || parsedLimit <= 0 ? 15 : parsedLimit;
+      const offset: number =
+        isNaN(parsedOffset) || parsedOffset < 0 ? 0 : parsedOffset;
+
+      console.log("컨트롤러 offset", offset);
+      const values = await this._articleService.getArticles(limit, offset);
       res.status(200).json(values);
-      console.log("values", values);
     } catch (error) {
       throw new HttpException(404, "목록 조회 중 오류 발생");
     }
@@ -43,8 +60,10 @@ export default class ArticleController {
     next: NextFunction
   ) {
     const { id } = req.params;
+    console.log("id는!!!", id);
     try {
       const values = await this._articleService.getArticleById(id);
+      res.status(200).json(values);
     } catch (error) {
       throw new HttpException(404, "게시글 조회 중 오류 발생");
     }
@@ -61,6 +80,7 @@ export default class ArticleController {
   ) {
     try {
       const { title, content, author, author_id } = req.body;
+
       const values = await this._articleService.createArticle({
         title,
         content,
@@ -71,20 +91,22 @@ export default class ArticleController {
       res.status(201).json(values);
     } catch (error) {
       console.error("❌ 게시글 생성 에러:", error);
+
       throw new HttpException(404, "게시글 생성 중 오류 발생");
     }
   }
   async updateArticle(
     req: Request<
-      updateArticleRequest["params"],
+      updateArticleRequest["path"],
       updateArticleResponse,
       updateArticleRequest["body"],
-      updateArticleRequest["path"]
+      updateArticleRequest["params"]
     >,
     res: Response,
     next: NextFunction
   ) {
     const { id } = req.params;
+    console.log("수정 id", req.body);
     try {
       await this._articleService.updateArticle(id, req.body);
       res.status(204).json();
@@ -97,7 +119,7 @@ export default class ArticleController {
       deleteArticleRequest["path"],
       deleteArticleRequest["body"],
       deleteArticleRequest["params"],
-      updateArticleResponse
+      deleteArticleResponse
     >,
     res: Response,
     next: NextFunction
