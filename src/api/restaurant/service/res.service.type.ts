@@ -1,12 +1,13 @@
 import { RestaurantResponseDTO } from "../dto/RestaurantResponse.dto";
 
 export interface RestaurantService {
-  getRestaurants(): Promise<RestaurantResponseDTO>;
+  getApiData(startIndex: number, endIndex: number): Promise<any>;
+  getRestaurants(): Promise<IRestaurant[]>;
   getRestaurantById(id: string): Promise<RestaurantResponseDTO | null>;
   createRestaurant(
     restaurant: Pick<
       IRestaurant,
-      "upsoName" | "category" | "rdnCode" | "rdnDetailAddr" | "source_type"
+      "upso_name" | "category" | "rdn_code" | "rdn_detail_addr" | "source_type"
     >
   ): Promise<RestaurantResponseDTO>;
 }
