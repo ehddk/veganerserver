@@ -5,6 +5,7 @@ import "@/envs";
 import express from "express";
 import { articleRouter } from "./api/article/router/article.router";
 import { commentRouter } from "./api/comment/router/comment.router";
+import { resRouter } from "./api/restaurant/router/res.router";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/articles", articleRouter);
 app.use("/api/comments", commentRouter);
+app.use("/api/restaurant", resRouter);
 
 app.listen(PORT, () => {
   console.log(`✅ 서버가 http://localhost:${PORT} 에서 실행 중입니다.`);

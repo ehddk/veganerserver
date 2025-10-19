@@ -27,8 +27,9 @@
     }
   },
   "ts-node": {
+    "require": ["tsconfig-paths/register"],
     "files": true /** Declaration Type 필수 */
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "**/*.test.js"]
 }
