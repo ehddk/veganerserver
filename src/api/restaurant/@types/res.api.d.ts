@@ -1,21 +1,20 @@
 type IRestaurant = {
   id?: string;
   /*업소명 */
-  upsoName?: string;
-  //   /*서비스명 */
-  //   service?: string;
+  upso_name: string;
+  /**도로명주소 */
+  rdn_code: string;
+
   /**자치구명 */
   cggName?: string;
   /*업종명*/
   cobName?: string;
-  /**도로명주소 */
-  rdnCode?: String;
   /**도로명 상세주소 */
-  rdnDetailAddr?: String;
+  rdn_detail_addr: string;
   /*업소번호 */
   upsoNum?: string;
   /*식품 인증 구분명  */
-  ctfcGbnName?: string;
+  ctfc_gbn_name: string;
   latitude?: number;
   longitude?: number;
   /*요청 시작 위치 */
@@ -62,7 +61,7 @@ type createRestaurantBody = IRestaurant;
 
 type createRestaurantRequest = {
   path?: createRestaurantPath;
-  parmas?: createRestaurantParams;
+  params?: createRestaurantParams;
   body: createRestaurantBody;
 };
 
