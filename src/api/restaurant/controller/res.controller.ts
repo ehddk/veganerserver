@@ -65,13 +65,11 @@ export class RestaurantController {
         upso_name,
         /**도로명주소 */
         rdn_code,
-        /**도로명 상세주소 */
-        rdn_detail_addr,
       } = req.body;
       const values = await this._resService.createRestaurant({
         upso_name,
         rdn_code,
-        rdn_detail_addr,
+
         /* open API인지 사용자인지 */
         source_type: "USER",
       });

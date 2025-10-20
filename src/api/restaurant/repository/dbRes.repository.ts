@@ -10,7 +10,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
 
   async save(restaurant: Omit<IRestaurant, "id">): Promise<IRestaurant> {
     const query = `
-         INSERT INTO restaurants (upso_name,rdn_code,rdn_detail_addr,source_type,ctfc_gbn_name)
+         INSERT INTO restaurants (upso_name,rdn_code,source_type,ctfc_gbn_name,cgg_code_name,tel_no)
          VALUES ($1, $2, $3, $4)
                  RETURNING *
         `;
@@ -18,9 +18,10 @@ export class DbRestaurantRepository implements RestuarantRepository {
     const result = await this.pool.query(query, [
       restaurant.upso_name,
       restaurant.rdn_code,
-      restaurant.rdn_detail_addr,
       restaurant.source_type,
       restaurant.ctfc_gbn_name,
+      restaurant.cgg_code_name,
+      restaurant.tel_no,
     ]);
     return result.rows[0];
   }
@@ -35,9 +36,10 @@ export class DbRestaurantRepository implements RestuarantRepository {
       "category",
       "latitude",
       "longitude",
-      "rdn_detail_addr",
       "source_type",
       "ctfc_gbn_name",
+      "cgg_code_name",
+      "tel_no",
     ];
     let values: any[] = [];
     let valueStrings: string[] = []; //
@@ -51,9 +53,10 @@ export class DbRestaurantRepository implements RestuarantRepository {
         r.category,
         r.latitude,
         r.longitude,
-        r.rdn_detail_addr,
         r.source_type,
-        r.ctfc_gbn_name
+        r.ctfc_gbn_name,
+        r.cgg_code_name,
+        r.tel_no
       ),
         valueStrings.push(
           `(${columns.map((_, i) => `$${start + i}`).join(", ")})`
@@ -68,8 +71,9 @@ export class DbRestaurantRepository implements RestuarantRepository {
      category=EXCLUDED.category,
     latitude=EXCLUDED.latitude,
     longitude=EXCLUDED.longitude,
-    rdn_detail_addr=EXCLUDED.rdn_detail_addr,
-    ctfc_gbn_name=EXCLUDED.ctfc_gbn_name
+    ctfc_gbn_name=EXCLUDED.ctfc_gbn_name,
+    cgg_code_name=EXCLUDED.cgg_code_name,
+    tel_no=EXCLUDED.tel_no
     `;
 
     try {
@@ -82,10 +86,10 @@ export class DbRestaurantRepository implements RestuarantRepository {
   }
 
   async findAll(): Promise<IRestaurant[]> {
-    const itemsQuery = ` SELECT * FROM restaurants`;
+    const itemsQuery = ` SELECT * FROM restaurants WHERE ctfc_gbn_name = '채식음식점';`;
 
     const itemResult = await this.pool.query(itemsQuery, []);
-    console.log("tie", itemResult);
+
     return itemResult.rows;
   }
 
@@ -93,7 +97,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
     const query = `
         SELECT 
          id,
-         upso_name,rdn_code,rdn_detail_addr,source_type
+         upso_name,rdn_code,source_type,category,ctfc_gbn_name,cgg_code_name,tel_no
         FROM
          restaurants
         WHERE id = $1
@@ -102,7 +106,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
 
     try {
       const result = await this.pool.query(query, [id]);
-      console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
+      // console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
       return result.rows[0];
     } catch (error) {
       console.error("failed", error);

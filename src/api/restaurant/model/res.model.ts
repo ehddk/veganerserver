@@ -42,12 +42,14 @@ export const mapOpenApiToDbModel = (
     //db 컬럼명 : api 필드명
     upso_name: apiRecord.UPSO_NM,
     rdn_code: apiRecord.RDN_CODE_NM || "",
-    rdn_detail_addr: apiRecord.RDN_DETAIL_ADDR || "",
+
     source_id: String(apiRecord.CRTFC_UPSO_MGT_SNO),
     ctfc_gbn_name: apiRecord.CRTFC_GBN_NM || "",
     latitude: parseCoordinate(apiRecord.Y_DNTS),
     longitude: parseCoordinate(apiRecord.X_DNTS),
     category: apiRecord.BIZCND_CODE_NM,
     source_type: "OPEN_API",
+    cgg_code_name: apiRecord.CGG_CODE_NM,
+    tel_no: apiRecord.TEL_NO,
   };
 };

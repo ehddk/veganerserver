@@ -2,22 +2,14 @@ export class RestaurantResponseDTO {
   id?: string;
   /*업소명 */
   upso_name?: string;
-  //   /*서비스명 */
-  //   service?: string;
-  /**자치구명 */
-  cggName?: string;
   /*업종명*/
-  cobName?: string;
+  cob_name?: string;
   /**도로명주소 */
-  rdnCode?: String;
-  /**도로명 상세주소 */
-  rdnDetailAddr?: string;
+  rdn_code?: String;
   /**식품인증구분명 */
   ctfc_gbn_name?: string;
   /*업소번호 */
   upsoNum?: string;
-  /*식품 인증 구분명  */
-  ctfcGbnName?: string;
   latitude?: number;
   longitude?: number;
   /*요청 시작 위치 */
@@ -28,13 +20,15 @@ export class RestaurantResponseDTO {
   source_type?: "OPEN_API" | "USER";
   source_id?: string | null; // CRTFC_UPSO_MGT_SNO
   category?: string; // COB_CODE_NM
+  cgg_code_name?: string;
+  tel_no?: string;
 
   constructor(params: IRestaurant) {
     this.id = params.id;
     this.category = params.category;
-    this.cggName = params.cggName;
-    this.cobName = params.cobName;
-    this.ctfcGbnName = params.ctfc_gbn_name;
+    this.rdn_code = params.rdn_code;
+    this.cob_name = params.cob_name;
+    this.ctfc_gbn_name = params.ctfc_gbn_name;
     this.endIndex = params.endIndex;
     this.startIndex = params.startIndex;
     this.latitude = params.latitude;
@@ -43,5 +37,7 @@ export class RestaurantResponseDTO {
     this.source_id = params.source_id;
     this.upso_name = params.upso_name;
     this.upsoNum = params.upsoNum;
+    this.cgg_code_name = params.cgg_code_name;
+    this.tel_no = params.tel_no;
   }
 }

@@ -4,13 +4,9 @@ type IRestaurant = {
   upso_name: string;
   /**도로명주소 */
   rdn_code: string;
-
-  /**자치구명 */
-  cggName?: string;
   /*업종명*/
-  cobName?: string;
-  /**도로명 상세주소 */
-  rdn_detail_addr: string;
+  cob_name?: string;
+
   /*업소번호 */
   upsoNum?: string;
   /*식품 인증 구분명  */
@@ -24,7 +20,11 @@ type IRestaurant = {
   /* open API인지 사용자인지 */
   source_type?: "OPEN_API" | "USER";
   source_id?: string; // CRTFC_UPSO_MGT_SNO
-  category?: string; // COB_CODE_NM
+  category?: string; // COB_CODE_NM,
+  /*자치구명  */
+  cgg_code_name?: string;
+  /*전화번호 */
+  tel_no?: string;
 };
 
 /**조회 */
@@ -51,7 +51,16 @@ type getRestaurantRequest = {
   body?: getRestaurantRequestBody;
 };
 
-type getRestaurantResponse = IRestaurant;
+type getRestaurantResponse = Pick<
+  IRestaurant,
+  | "id"
+  | "upso_name"
+  | "ctfc_gbn_name"
+  | "rdn_code"
+  | "category"
+  | "cgg_code_name"
+  | "tel_no"
+>;
 
 /* 생성 */
 

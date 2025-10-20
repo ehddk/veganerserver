@@ -7,7 +7,7 @@ export interface RestaurantService {
   createRestaurant(
     restaurant: Pick<
       IRestaurant,
-      "upso_name" | "category" | "rdn_code" | "rdn_detail_addr" | "source_type"
+      "upso_name" | "category" | "rdn_code" | "source_type"
     >
   ): Promise<RestaurantResponseDTO>;
 }

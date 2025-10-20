@@ -69,7 +69,7 @@ export class ResServicesImpl implements RestaurantService {
   async getRestaurantById(id: string): Promise<RestaurantResponseDTO | null> {
     try {
       const restaurant = await this._resRepository.findById(id);
-
+      console.log("service:::", restaurant);
       if (!restaurant) {
         throw new HttpException(404, "해당 음식점을 찾을 수 없습니다.");
       }
@@ -81,7 +81,7 @@ export class ResServicesImpl implements RestaurantService {
   async createRestaurant(
     restaurant: Pick<
       IRestaurant,
-      "upso_name" | "category" | "rdn_code" | "rdn_detail_addr" | "source_type"
+      "upso_name" | "category" | "rdn_code" | "source_type"
     >
   ): Promise<RestaurantResponseDTO> {
     try {
