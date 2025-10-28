@@ -4,48 +4,57 @@ type IReview = {
   restaurant_id: string;
   rating: number;
   content: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 /**조회 */
-type Path = {};
-type Params = {};
+type GetReviewRequestPath = {
+  limit?: number;
+  offset?: number;
+};
+
+type Path = GetReviewRequestPath;
+type Params = { restaurant_id: string };
 type Body = {};
-type Request = {
-  path?: Path;
-  params?: Params;
+type getReviewRequest = {
+  path: Path;
+  params: Params;
   body?: Body;
 };
 
-type Response = IReview[];
+type getReviewResponse = IReview[];
 
 /**생성 */
-type Body = IReview;
-type Path = {};
-type Params = {};
-type Request = {
-  path?: Path;
-  params?: Params;
-  body: Body;
+type createReviewRequestPath = { restaurant_id: string };
+type createReviewRequestParams = {};
+type createReviewRequestBody = {
+  content: string;
+  rating: number;
 };
 
-type Response = IReview;
+type createReviewRequest = {
+  path: createReviewRequestPath;
+  params?: createReviewRequestParams;
+  body: createReviewRequestBody;
+};
+
+type createReviewResponse = IReview;
 /**수정 */
 type UpdateReviewRequestPath = { id: string };
 type UpdateReviewRequestParams = {};
 type UpdateReviewRequestBody = {
   rating: number;
   content: string;
-  updated_at: Date;
+  updatedAt: Date;
 };
 
-type Request = {
+type updateReviewRequest = {
   path: UpdateReviewRequestPath;
   params?: UpdateReviewRequestParams;
   body: UpdateReviewRequestBody;
 };
-type Response = true;
+type updateReviewResponse = true;
 /**삭제 */
 type DeleteReviewRequestPath = { id: string };
 
@@ -53,9 +62,9 @@ type DeleteReviewRequestParams = {};
 type DeleteReviewRequestBody = {};
 type DeleteReviewResponse = true;
 
-type Request = {
+type deleteReviewRequest = {
   path: DeleteReviewRequestPath;
   params?: DeleteReviewRequestParams;
   body?: DeleteReviewRequestBody;
 };
-type Response = DeleteReviewResponse;
+type deleteReviewResponse = DeleteReviewResponse;

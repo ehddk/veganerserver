@@ -5,6 +5,7 @@ import errorHandler from "./api/common/middlewares/errorHandler.middleware";
 import cors from "cors";
 import { commentRouter } from "./api/comment/router/comment.router";
 import { resRouter } from "./api/restaurant/router/res.router";
+import { reviewRouter } from "./api/review/router/review.router";
 const app = express();
 
 app.use(
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use("/api/articles", articleRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/restaurant", resRouter);
-
+app.use("/api/review", reviewRouter);
 app.listen(4000, () => {
   console.log(`Server is running on port 4000`);
 });
