@@ -6,6 +6,7 @@ import cors from "cors";
 import { commentRouter } from "./api/comment/router/comment.router";
 import { resRouter } from "./api/restaurant/router/res.router";
 import { reviewRouter } from "./api/review/router/review.router";
+import { authRouter } from "./api/auth/router/auth.router";
 const app = express();
 
 app.use(
@@ -23,6 +24,7 @@ app.use("/api/articles", articleRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/restaurant", resRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/auth", authRouter);
 app.listen(4000, () => {
   console.log(`Server is running on port 4000`);
 });
