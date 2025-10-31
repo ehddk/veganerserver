@@ -1,8 +1,10 @@
 type IAuth = {
+  role?: RoleType;
+  salt?: string;
   id: string;
   email: string;
   name: string;
-  password: string;
+  password?: string;
 };
 
 /**조회 */
