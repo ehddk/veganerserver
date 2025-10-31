@@ -8,11 +8,21 @@ import { commentRouter } from "./api/comment/router/comment.router";
 import { resRouter } from "./api/restaurant/router/res.router";
 import { reviewRouter } from "./api/review/router/review.router";
 import { authRouter } from "./api/auth/router/auth.router";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("서버 정상 작동 중!");
