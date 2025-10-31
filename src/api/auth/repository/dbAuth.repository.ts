@@ -2,10 +2,25 @@ import { AuthRepository } from "./auth.repository";
 import { pool } from "../../../config/database";
 
 export class DbAuthRepository implements AuthRepository {
+  async findByEmail(email: string): Promise<IAuth> {
+    const query = `
+       SELECT * FROM auth WHERE email = $1
+
+      `;
+
+    try {
+      const result = await pool.query(query, [email]);
+
+      return result.rows[0] || null;
+    } catch (error) {
+      console.error("failed", error);
+      throw new Error("쿼리 실행 중 오류 발생!");
+    }
+  }
   async save(auth: Omit<IAuth, "id">): Promise<IAuth> {
     const query = `
-        INSERT INTO auth (name,email,password)
-        VALUES ($1, $2, $3)
+        INSERT INTO auth (name,email,password,salt)
+        VALUES ($1, $2, $3, $4)
         RETURNING *
         `;
 
@@ -13,9 +28,9 @@ export class DbAuthRepository implements AuthRepository {
       auth.name,
       auth.email,
       auth.password,
+      auth.salt,
     ]);
 
-    console.log("resukt???", result);
     return result.rows[0];
   }
 
