@@ -11,4 +11,5 @@ const authController = new AuthController(
 authRouter.get("/:id", authController.getAuthById);
 authRouter.post("/", authController.createAuth);
 authRouter.put("/:id", authController.updateAuth);
-authRouter.delete("/:id", authController.deleteMember);
+authRouter.delete("/:id", authController.deleteAuth);
+authRouter.post("/login", authController.login);
