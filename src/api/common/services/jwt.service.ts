@@ -1,6 +1,6 @@
 // src/api/common/services/jwt.service.ts
 
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions, Secret } from "jsonwebtoken";
 
 type Params = {
   /** 유저 ID */
@@ -8,7 +8,7 @@ type Params = {
   /** 역할 */
   role?: RoleType;
   /** 만료 시간 */
-  expiresIn?: string;
+  expiresIn?: any;
 };
 
 export class JwtService {
@@ -34,21 +34,23 @@ export class JwtService {
   /** 엑세스 토큰 발행 */
   static generateAccessToken(params: Params) {
     const { userId, expiresIn, role } = params;
+    const options: SignOptions = {
+      expiresIn: expiresIn || "1h",
+    };
 
     return jwt.sign(
       { userId, role: role ?? "user" },
       this.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: expiresIn || "1h",
-      }
+      options // 명시된 옵션 객체를 전달
     );
   }
 
   /** 리프레시 토큰 발행 */
   static generateRefreshToken(params: Omit<Params, "role">) {
     const { userId, expiresIn } = params;
-    return jwt.sign({ userId }, this.REFRESH_TOKEN_SECRET, {
+    const options: SignOptions = {
       expiresIn: expiresIn || "14d",
-    });
+    };
+    return jwt.sign({ userId }, this.REFRESH_TOKEN_SECRET as Secret, options);
   }
 }
