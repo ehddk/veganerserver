@@ -3,6 +3,7 @@ import { ArticleServicesImpl } from "../service/article.service";
 
 import ArticleController from "../controller/article.controller";
 import { DbArticleRepository } from "../repository/dbArticle.repository";
+import { authRoleMiddleware } from "@/api/common/middlewares/authRole.middleware";
 export const articleRouter = express.Router();
 
 const ARTICLE_ROUTES = {
@@ -37,6 +38,10 @@ const articleController = new ArticleController(
 
 articleRouter.get("/", articleController.getArticles);
 articleRouter.get("/:id", articleController.getArticleById);
-articleRouter.post("/", articleController.createArticle);
+articleRouter.post(
+  "/",
+  authRoleMiddleware(["user"]),
+  articleController.createArticle
+);
 articleRouter.put("/:id", articleController.updateArticle);
 articleRouter.delete("/:id", articleController.deleteArticle);
