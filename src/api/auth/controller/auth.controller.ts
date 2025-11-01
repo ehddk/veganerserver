@@ -68,6 +68,15 @@ export default class AuthController {
     }
   }
 
+  async logout(req: Request, res: Response, next: NextFunction) {
+    res.cookie("accessToken", "", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({ message: "로그아웃 성공" });
+  }
   async createAuth(
     req: Request<
       createMemberRequest["params"],

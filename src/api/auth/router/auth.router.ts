@@ -13,3 +13,4 @@ authRouter.post("/", authController.createAuth);
 authRouter.put("/:id", authController.updateAuth);
 authRouter.delete("/:id", authController.deleteAuth);
 authRouter.post("/login", authController.login);
+authRouter.post("/logout", authController.logout);
