@@ -7,18 +7,13 @@ export const authRoleMiddleware = (roles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // 헤더에서 토큰을 가져옵니다.
-      //const token = req.headers.authorization;
-      const token = req.cookies.accessToken;
+      const token = req.headers.authorization;
+      //const token = req.cookies.accessToken;
 
-      console.log("token??", req.cookies);
       // 토큰이 없으면 에러를 던집니다.
       if (!token) {
         throw new HttpException(401, "토큰이 없습니다.");
       }
-
-      // 토큰에서 페이로드를 가져옵니다.
-      // const tokenValue = token.split("Bearer ")[1];
-      //const tokenValue = JwtService.verifyAccessToken(token);
 
       // 페이로드에서 역할을 확인합니다.
       const payload = JwtService.verifyAccessToken(token);

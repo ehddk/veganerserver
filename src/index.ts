@@ -9,6 +9,7 @@ import { resRouter } from "./api/restaurant/router/res.router";
 import { reviewRouter } from "./api/review/router/review.router";
 import { authRouter } from "./api/auth/router/auth.router";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -23,6 +24,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("서버 정상 작동 중!");

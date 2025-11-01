@@ -42,10 +42,8 @@ export default class AuthController {
     try {
       const { email, password } = req.body;
 
-      // Access token is returned from the service
       const accessToken = await this._authService.login(email, password);
 
-      // Set the access token in an HTTP Only cookie for security
       const maxAge = 1000 * 60 * 60 * 24 * 7; // 7 days in milliseconds (matches token expiry)
 
       const isProduction = process.env.NODE_ENV === "production";
@@ -56,8 +54,8 @@ export default class AuthController {
         // 로컬 환경에서도 secure: true가 되도록 강제합니다. (운영 환경에서는 NODE_ENV 체크를 통해 HTTPS가 보장됨)
 
         // 크로스 오리진 요청(3000 -> 4000)에서 쿠키 저장을 허용
-        sameSite: "none",
-        secure: true,
+        sameSite: isProduction ? "none" : "lax",
+        secure: isProduction,
         maxAge: maxAge,
       });
 
