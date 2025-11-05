@@ -61,8 +61,9 @@ export default class ReviewController {
   ) {
     try {
       const { restaurant_id } = req.params;
+
       const { content, rating } = req.body;
-      const user_id = "1";
+      const user_id = req.user.userId;
       const numericRating = parseInt(rating as unknown as string, 10);
       const reviewData: Omit<IReview, "id" | "createdAt" | "updatedAt"> = {
         restaurant_id: restaurant_id,
@@ -71,7 +72,6 @@ export default class ReviewController {
         rating: numericRating,
       };
 
-      console.log("reviewData", reviewData);
       const values = await this._reviewService.createReview(reviewData);
 
       res.status(201).json(values);
