@@ -89,12 +89,12 @@ export default class AuthController {
   ) {
     try {
       const { name, email, password } = req.body;
+
       const { hashedPassword, salt } = CryptoService.encryptPassword(password);
       const values = await this._authService.createAuth({
         name,
         email,
-        password: hashedPassword,
-        salt: salt,
+        password,
       });
       res.status(200).json(values);
     } catch (error) {

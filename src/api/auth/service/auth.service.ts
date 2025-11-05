@@ -53,10 +53,28 @@ export class AuthServicesImpl implements AuthService {
 
   async createAuth(auth: Omit<IAuth, "id">): Promise<AuthResponseDTO> {
     try {
-      const newAuth = await this._authRepository.save(auth);
+      const { email, password } = auth;
+      const exisitingUser = await this._authRepository.findByEmail(email);
 
-      return new AuthResponseDTO(newAuth);
+      if (exisitingUser) {
+        throw new HttpException(409, "이미 존재하는 이메일입니다");
+      }
+
+      const { hashedPassword, salt } = CryptoService.encryptPassword(password);
+
+      const newUser = await this._authRepository.save({
+        email,
+        password: hashedPassword,
+        salt,
+        name: auth.name || "User",
+        role: "user",
+      });
+
+      return new AuthResponseDTO(newUser);
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new Error("계정 생성 중 오류 발생");
     }
   }
