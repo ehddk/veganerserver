@@ -6,9 +6,19 @@ import { JwtService } from "../services/jwt.service";
 export const authRoleMiddleware = (roles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
+      let tokenValue: string | undefined;
+
       // 헤더에서 토큰을 가져옵니다.
-      const token = req.headers.authorization;
-      //const token = req.cookies.accessToken;
+      const token = req.cookies.accessToken;
+
+      // 2. 쿠키에 없으면 Authorization 헤더에서 확인합니다. (Postman 요청)
+      if (!tokenValue && req.headers.authorization) {
+        const parts = req.headers.authorization.split("Bearer ");
+        // Bearer <token> 형태인지 확인 후 토큰 값만 추출
+        if (parts.length === 2) {
+          tokenValue = parts[1];
+        }
+      }
 
       // 토큰이 없으면 에러를 던집니다.
       if (!token) {
@@ -31,7 +41,10 @@ export const authRoleMiddleware = (roles: RoleType[]) => {
       next();
     } catch (error: any) {
       next(
-        new HttpException(error.statusCode ?? 401, `인증 실패 ${error.message}`)
+        new HttpException(
+          error.statusCode ?? 401,
+          `인증 실패했습니다. ${error.message}`
+        )
       );
     }
   };
