@@ -41,7 +41,7 @@ type createReviewRequest = {
 
 type createReviewResponse = IReview;
 /**수정 */
-type UpdateReviewRequestPath = { id: string };
+type UpdateReviewRequestPath = { restaurant_id: string; id: string };
 type UpdateReviewRequestParams = {};
 type UpdateReviewRequestBody = {
   rating: number;
