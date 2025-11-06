@@ -16,6 +16,7 @@ export interface ReviewService {
 
   updateReview(
     id: string,
+    currentUserId: string,
     reviewInfo: Omit<IReview, "id" | "user_id" | "restaurant_id" | "createdAt">
   ): Promise<void>;
   deleteReview(id: string): Promise<void>;

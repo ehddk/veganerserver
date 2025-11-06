@@ -9,6 +9,10 @@ export interface ReviewRepository {
   save(
     review: Omit<IReview, "id" | "createdAt" | "updatedAt">
   ): Promise<IReview>;
-  update(id: string, reviewInfo: Partial<IReview>): Promise<IReview | null>;
+  update(
+    id: string,
+    currentUserId: string,
+    reviewInfo: Partial<IReview>
+  ): Promise<IReview | null>;
   delete(id: string): Promise<void>;
 }

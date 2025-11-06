@@ -80,6 +80,7 @@ export class DbReviewRepository implements ReviewRepository {
 
   async update(
     id: string,
+    currentUserId: string,
     review: Partial<Omit<IReview, "id" | "createdAt" | "user_id">>
   ): Promise<IReview | null> {
     const keys = Object.keys(review);
@@ -90,9 +91,9 @@ export class DbReviewRepository implements ReviewRepository {
     }
 
     const setClause = keys.map((key, idx) => `${key} = $${idx + 1}`).join(", ");
-    const values = [...keys.map((k) => (review as any)[k]), id];
+    const values = [...keys.map((k) => (review as any)[k]), id, currentUserId];
     const query = `UPDATE review SET ${setClause}, "updatedAt" = NOW()
-     WHERE id = $${keys.length + 1}::integer
+     WHERE id = $${keys.length + 1}::integer AND user_id = $${keys.length + 2}
       RETURNING id, restaurant_id , content, user_id, "createdAt", "updatedAt"
      `;
     try {

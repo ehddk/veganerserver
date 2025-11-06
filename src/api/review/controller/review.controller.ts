@@ -93,8 +93,9 @@ export default class ReviewController {
     next: NextFunction
   ) {
     const { id } = req.params;
+    const currentUserId = req.user.userId;
     try {
-      await this._reviewService.updateReview(id, req.body);
+      await this._reviewService.updateReview(id, currentUserId, req.body);
       res.status(204).json();
     } catch (error) {
       throw new HttpException(404, "게시글 수정 중 오류 발생");

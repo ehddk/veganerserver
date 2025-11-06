@@ -43,15 +43,20 @@ export class ReviewServicesImpl implements ReviewService {
 
   async updateReview(
     id: string,
+    currentUserId: string,
     reviewInfo: Omit<
       IReview,
       "id" | "author_id" | "restaurant_id" | "createdAt"
     >
   ): Promise<void> {
     try {
-      const updateReview = await this._reviewRepository.update(id, reviewInfo);
+      const updateReview = await this._reviewRepository.update(
+        id,
+        currentUserId,
+        reviewInfo
+      );
 
-      if (!this.updateReview) {
+      if (!updateReview) {
         throw new HttpException(404, "해당 리뷰를 찾을 수 없습니다.");
       }
     } catch (error) {
