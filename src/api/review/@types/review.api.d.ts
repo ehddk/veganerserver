@@ -1,6 +1,7 @@
 type IReview = {
   id: string;
   user_id: string;
+  user: string;
   restaurant_id: string;
   rating: number;
   content: string;

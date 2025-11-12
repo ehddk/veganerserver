@@ -4,6 +4,8 @@ import { Pool } from "pg";
 import { ReviewRepository } from "./review.repository";
 import { PaginatedReviews } from "../@types/review.type";
 
+const AUTH_NAME_COLUMN = "name";
+
 export class DbReviewRepository implements ReviewRepository {
   private readonly pool: Pool;
   constructor(dbPool: Pool) {
@@ -13,9 +15,34 @@ export class DbReviewRepository implements ReviewRepository {
   async save(
     review: Omit<IReview, "id" | "createdAt" | "updatedAt">
   ): Promise<IReview> {
+    const userId = review.user_id;
+    let userName = "익명사용자";
+
+    const userQuery = `SELECT "${AUTH_NAME_COLUMN}" FROM "auth" WHERE id = $1`;
+
+    try {
+      const userResult = await this.pool.query(userQuery, [userId]);
+
+      // 이름이 조회되면 userName 업데이트
+      if (userResult.rows[0]) {
+        userName = userResult.rows[0][AUTH_NAME_COLUMN];
+      }
+    } catch (error) {
+      // 🚨 쿼리 실패 시 (테이블/컬럼 이름 오류 등) 여기서 잡아서 로그 출력
+      // 이 로그에 SQL 에러 메시지가 담겨 문제의 원인(틀린 테이블/컬럼 이름)을 알려줄 것입니다.
+      console.error(
+        `[ReviewRepo ERROR] Failed to fetch user name with query: "${userQuery}"`,
+        error
+      );
+      // 에러가 발생해도 userName은 기본값인 '익명사용자'를 유지하고 계속 진행합니다.
+    }
+    // const userName = userResult.rows[0]
+    //   ? userResult.rows[0]["name"]
+    //   : "익명사용자";
+
     const query = `
-      INSERT INTO review (user_id,restaurant_id,rating,content)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO review (user_id,restaurant_id,rating,content, "user" )
+      VALUES ($1, $2, $3, $4, $5)
               RETURNING *
     `;
 
@@ -24,7 +51,9 @@ export class DbReviewRepository implements ReviewRepository {
       review.restaurant_id,
       review.rating,
       review.content,
+      userName,
     ]);
+    console.log("리절트", result);
     return result.rows[0];
   }
 
@@ -39,9 +68,6 @@ export class DbReviewRepository implements ReviewRepository {
       // 이 에러는 호출하는 서비스/컨트롤러에서 처리될 수 있도록 던져줍니다.
       throw new Error("유효하지 않은 식당 ID 형식입니다.");
     }
-    console.log(
-      `[Repository Debug] restaurantIdNumber: ${restaurantIdNumber}, Type: ${typeof restaurantIdNumber}`
-    );
 
     const itemsQuery = `
         SELECT * FROM review
@@ -94,10 +120,16 @@ export class DbReviewRepository implements ReviewRepository {
     const values = [...keys.map((k) => (review as any)[k]), id, currentUserId];
     const query = `UPDATE review SET ${setClause}, "updatedAt" = NOW()
      WHERE id = $${keys.length + 1}::integer AND user_id = $${keys.length + 2}
-      RETURNING id, restaurant_id , content, user_id, "createdAt", "updatedAt"
+      RETURNING id, restaurant_id , rating, content, user_id, "user","createdAt", "updatedAt"
      `;
     try {
       const result = await this.pool.query(query, values);
+      if (result.rowCount === 0) {
+        console.log(
+          `[ReviewRepo] Update failed: Review ID ${id} not found or not owned by user ${currentUserId}`
+        );
+        return null;
+      }
       return result.rows[0] || null;
     } catch (error) {
       throw error;
