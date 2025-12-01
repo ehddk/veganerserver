@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import { ArticleServicesImpl } from "../service/article.service";
 
 import ArticleController from "../controller/article.controller";
@@ -43,5 +43,13 @@ articleRouter.post(
   authRoleMiddleware(["user"]),
   articleController.createArticle
 );
-articleRouter.put("/:id", articleController.updateArticle);
-articleRouter.delete("/:id", articleController.deleteArticle);
+articleRouter.put(
+  "/:id",
+  authRoleMiddleware(["user"]),
+  articleController.updateArticle
+);
+articleRouter.delete(
+  "/:id",
+  authRoleMiddleware(["user"]),
+  articleController.deleteArticle as unknown as RequestHandler
+);

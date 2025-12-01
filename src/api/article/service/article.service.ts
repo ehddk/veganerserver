@@ -19,7 +19,7 @@ export class ArticleServicesImpl implements ArticleService {
   ): Promise<PaginatedArticleResponseDTO> {
     try {
       const values = await this._articleRepository.findAll(limit, offset);
-      console.log("서비스에서 벨루", values);
+      // console.log("서비스에서 벨루", values);
       return values;
     } catch (error) {
       throw new Error("목록 조회 중 오류 발생");
