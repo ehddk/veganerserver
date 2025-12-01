@@ -53,7 +53,7 @@ export class DbReviewRepository implements ReviewRepository {
       review.content,
       userName,
     ]);
-    console.log("리절트", result);
+
     return result.rows[0];
   }
 

@@ -43,7 +43,6 @@ export class ResServicesImpl implements RestaurantService {
         }
         if (totalCount === Infinity) {
           totalCount = info.list_total_count;
-          console.log(`Total records to fetch: ${totalCount}`);
         }
         allRecords.push(...records);
         startIndex += API_PAGE_SIZE;
@@ -69,7 +68,7 @@ export class ResServicesImpl implements RestaurantService {
   async getRestaurantById(id: string): Promise<RestaurantResponseDTO | null> {
     try {
       const restaurant = await this._resRepository.findById(id);
-      console.log("service:::", restaurant);
+      //console.log("service:::", restaurant);
       if (!restaurant) {
         throw new HttpException(404, "해당 음식점을 찾을 수 없습니다.");
       }

@@ -24,7 +24,7 @@ export class RestaurantController {
   ) {
     try {
       const values = await this._resService.getRestaurants();
-      console.log("adasda", values);
+
       res.status(200).json(values);
     } catch (error) {
       throw new HttpException(404, "목록 조회 중 오류");

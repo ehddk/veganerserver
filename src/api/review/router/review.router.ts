@@ -31,7 +31,7 @@ reviewRouter.put(
   reviewController.updateReview
 );
 reviewRouter.delete(
-  "/restaurant_id/:id",
+  "/:restaurant_id/:id",
   authRoleMiddleware(["user"]),
   reviewController.deleteReview
 );
