@@ -3,13 +3,14 @@ import CommentController from "../controller/comment.controller";
 export const commentRouter = express.Router();
 import { DbCommentRepository } from "../repository/dbComment.repository";
 import { CommentServicesImpl } from "../service/comment.service";
+import { authRoleMiddleware } from "@/api/common/middlewares/authRole.middleware";
 
 const COMMENT_ROUTES = {
-  GET_COMMENTS: "/",
-  GET_COMMENT_BY_ID: "/:id",
-  CREATE_COMMENT: "/",
-  UPDATE_COMMENT: "/:id",
-  DELETE_COMMENT: "/:id",
+  GET_COMMENTS: "/:article_id",
+  GET_COMMENT_BY_ID: "/:article_id/:id",
+  CREATE_COMMENT: "/:article_id",
+  UPDATE_COMMENT: "/:article_id/:id",
+  DELETE_COMMENT: "/:article_id/:id",
 };
 
 const commentController = new CommentController(
@@ -17,12 +18,13 @@ const commentController = new CommentController(
 );
 
 commentRouter.get(COMMENT_ROUTES.GET_COMMENTS, commentController.getComments);
-commentRouter.get(
-  COMMENT_ROUTES.GET_COMMENT_BY_ID,
-  commentController.getCommentById
-);
+// commentRouter.get(
+//   COMMENT_ROUTES.GET_COMMENT_BY_ID,
+//   commentController.getCommentById
+// );
 commentRouter.post(
   COMMENT_ROUTES.CREATE_COMMENT,
+  authRoleMiddleware(["user"]),
   commentController.createComment
 );
 commentRouter.put(

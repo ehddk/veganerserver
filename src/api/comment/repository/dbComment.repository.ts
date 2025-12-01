@@ -3,28 +3,61 @@ import { pool } from "../../../config/database";
 import { IComment } from "../@types/comment.api";
 
 export class DbCommentRepository implements CommentRepository {
-  async save(comment: Omit<IComment, "id">): Promise<IComment> {
+  async save(
+    comment: Omit<IComment, "id" | "createdAt" | "updatedAt">
+  ): Promise<IComment> {
+    const userQuery = `SELECT "name" FROM "auth" WHERE id = $1`;
+    const userId = comment.user_id;
+    let userName = "익명사용자";
+
+    try {
+      const userResult = await pool.query(userQuery, [userId]);
+
+      if (userResult.rows[0]) {
+        userName = userResult.rows[0]["name"];
+      }
+      console.log(`[Repo Debug] 조회된 userName: ${userName}`);
+    } catch (error) {
+      console.error(
+        `[CommentRepo ERROR] Failed to fetch user name with query: "${userQuery}"`,
+        error
+      );
+    }
     const query = `
-            INSERT INTO comments (content, author,author_id)
-        VALUES ($1, $2, $3, $4)
-            RETURNING *
-          `;
+      INSERT INTO comments (content,user_id, article_id, "user")
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+      `;
 
-    const result = await pool.query(query, [
-      comment.content,
-      comment.author,
-      comment.author_id,
-    ]);
-    console.log("🔍 INSERT 데이터:", result);
+    try {
+      // 🚨 최종 INSERT 쿼리 실행
+      const result = await pool.query(query, [
+        comment.content, // $1
+        comment.user_id, // $2: user_id
+        comment.article_id, // $3
+        userName, // $4: "user" 컬럼에 저장될 이름
+      ]);
 
-    return result.rows[0];
-    // createdAt: new Date(),
+      // console.log("🔍 INSERT 데이터:", result.rows[0].userName);
+
+      return result.rows[0];
+    } catch (insertError) {
+      // 🚨 이 블록에서 실제 DB 에러(예: NOT NULL, FK 위반 등)를 포착하고 명확히 로깅합니다.
+      console.error(
+        "❌ [CommentRepo FINAL INSERT ERROR] 댓글 삽입 실패:",
+        insertError
+      );
+
+      // 서비스 레이어로 에러를 다시 던져줍니다. (컨트롤러에서 500으로 잡을 것임)
+      throw insertError;
+    }
   }
 
-  async findAll(): Promise<IComment[]> {
-    const query = `SELECT * FROM comments`;
+  async findAll(article_id: string): Promise<IComment[]> {
+    const aricleId = article_id;
+    const query = `SELECT * FROM comments WHERE article_id = $1 ORDER BY "createdAt" DESC`;
 
-    const result = await pool.query(query);
+    const result = await pool.query(query, [aricleId]);
     return result.rows;
   }
 

@@ -6,23 +6,25 @@ import { JwtService } from "../services/jwt.service";
 export const authRoleMiddleware = (roles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      let tokenValue: string | undefined;
+      //let tokenValue: string | undefined;
 
       // 헤더에서 토큰을 가져옵니다.
-      const token = req.cookies.accessToken;
+      let token = req.cookies.accessToken;
 
       // 2. 쿠키에 없으면 Authorization 헤더에서 확인합니다. (Postman 요청)
-      if (!tokenValue && req.headers.authorization) {
+      if (!token && req.headers.authorization) {
         const parts = req.headers.authorization.split("Bearer ");
         // Bearer <token> 형태인지 확인 후 토큰 값만 추출
         if (parts.length === 2) {
-          tokenValue = parts[1];
+          token = parts[1];
         }
       }
 
+      console.log("token", token);
+
       // 토큰이 없으면 에러를 던집니다.
       if (!token) {
-        throw new HttpException(401, "토큰이 없습니다.");
+        throw new HttpException(401, "토큰이 없습니다!!");
       }
 
       // 페이로드에서 역할을 확인합니다.

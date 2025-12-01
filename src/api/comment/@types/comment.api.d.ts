@@ -1,129 +1,148 @@
 export interface IComment {
   id: string;
   article_id: string;
-  author_id: string;
-  author: string;
+  user_id: string;
+  user: string;
   content: string;
   createdAt: Date;
   updatedAt?: Date;
 }
 
-declare global {
-  /** 댓글 목록 조회 */
-  type getCommentsRequestPath = {
-    articleId: string;
-  };
-  type getCommentsRequestParams = {};
+/** 댓글 목록 조회 */
+type getCommentsRequestPath = {};
+type getCommentsRequestParams = { article_id: string };
 
-  type getCommentsResponse = IComment[];
+type getCommentsRequest = {
+  path?: getCommentsRequestPath;
+  params: getCommentsRequestParams;
+  body?: {};
+};
+type getCommentsResponse = IComment[];
 
-  /** 댓글 생성 */
-  type createCommentRequestPath = {};
-  type createCommentRequestBody = {
-    article_id: string;
-    author_id: string;
-    author: string;
-    content: string;
-  };
-  type createCommentResponse = IComment;
+/** 댓글 생성 */
+type createCommentRequestPath = { article_id: string };
+type createCommentRequestParams = {};
 
-  /** 댓글 수정 */
-  type updateCommentRequestPath = {
-    commentId: string;
-  };
-  type updateCommentRequestBody = {
-    content: string;
-    updatedAt: Date;
-  };
-  type updateCommentResponse = IComment;
+type createCommentRequestBody = {
+  content: string;
+};
 
-  /** 댓글 삭제 */
-  type deleteCommentRequestPath = {
-    commentId: string;
-  };
-  type deleteCommentResponse = true; // 삭제 성공 여부
+type createCommentRequest = {
+  path: createCommentRequestPath;
+  params?: createCommentRequestParams;
+  body: createCommentRequestBody;
+};
+type createCommentResponse = IComment;
 
-  namespace Comment {
-    /**
-     * @path /api/comments
-     * @description
-     */
-    namespace GetList {
-      type Params = {};
-      type Path = {};
-      type Body = {};
-      type Request = {
-        params?: Params;
-        path: Path;
-        body?: Body;
-      };
+/** 댓글 수정 */
+type updateCommentRequestPath = {
+  commentId: string;
+};
+type updateCommentRequestBody = {
+  content: string;
+  updatedAt: Date;
+};
 
-      type Response = getCommentsResponse;
-    }
+type updateCommentRequest = {
+  path: updateCommentRequestPath;
+  params?: {};
+  body: updateCommentRequestBody;
+};
 
-    /**
-     * @path /api/comments/:articleId
-     * @description
-     */
-    namespace GetOne {
-      type Params = {};
-      type Path = { id: string };
-      type Body = {};
-      type Request = {
-        params?: Params;
-        path: Path;
-        body?: Body;
-      };
+type updateCommentResponse = IComment;
 
-      type Response = getCommentsResponse;
-    }
+/** 댓글 삭제 */
+type deleteCommentRequestPath = {
+  commentId: string;
+};
 
-    /**
-     * @path /api/comments
-     * @description 댓글 생성
-     */
-    namespace Post {
-      type Params = {};
-      type Path = {};
-      type Body = createCommentRequestBody;
-      type Request = {
-        params?: Params;
-        path?: Path;
-        body: Body;
-      };
-      type Response = createCommentResponse;
-    }
+type deleteCommentRequest = {
+  path: deleteCommentRequestPath;
+  params?: {};
+  body?: {};
+};
+type deleteCommentResponse = true; // 삭제 성공 여부
 
-    /**
-     * @path /api/comments/:commentId
-     * @description 댓글 수정
-     */
-    namespace Put {
-      type Path = updateCommentRequestPath;
-      type Params = {};
-      type Body = updateCommentRequestBody;
-      type Request = {
-        path: Path;
-        params?: Params;
-        body: Body;
-      };
-      type Response = updateCommentResponse;
-    }
+namespace Comment {
+  /**
+   * @path /api/comments
+   * @description
+   */
+  namespace GetList {
+    type Params = {};
+    type Path = {};
+    type Body = {};
+    type Request = {
+      params?: Params;
+      path: Path;
+      body?: Body;
+    };
 
-    /**
-     * @path /api/comments/:commentId
-     * @description 댓글 삭제
-     */
-    namespace Delete {
-      type Params = {};
-      type Path = deleteCommentRequestPath;
-      type Body = {};
-      type Request = {
-        path: Path;
-        params?: Params;
-        body?: Body;
-      };
-      type Response = deleteCommentResponse;
-    }
+    type Response = getCommentsResponse;
+  }
+
+  /**
+   * @path /api/comments/:articleId
+   * @description
+   */
+  namespace GetOne {
+    type Params = {};
+    type Path = { id: string };
+    type Body = {};
+    type Request = {
+      params?: Params;
+      path: Path;
+      body?: Body;
+    };
+
+    type Response = getCommentsResponse;
+  }
+
+  /**
+   * @path /api/comments
+   * @description 댓글 생성
+   */
+  namespace Post {
+    type Params = {};
+    type Path = {};
+    type Body = createCommentRequestBody;
+    type Request = {
+      params?: Params;
+      path?: Path;
+      body: Body;
+    };
+    type Response = createCommentResponse;
+  }
+
+  /**
+   * @path /api/comments/:commentId
+   * @description 댓글 수정
+   */
+  namespace Put {
+    type Path = updateCommentRequestPath;
+    type Params = {};
+    type Body = updateCommentRequestBody;
+    type Request = {
+      path: Path;
+      params?: Params;
+      body: Body;
+    };
+    type Response = updateCommentResponse;
+  }
+
+  /**
+   * @path /api/comments/:commentId
+   * @description 댓글 삭제
+   */
+  namespace Delete {
+    type Params = {};
+    type Path = deleteCommentRequestPath;
+    type Body = {};
+    type Request = {
+      path: Path;
+      params?: Params;
+      body?: Body;
+    };
+    type Response = deleteCommentResponse;
   }
 }

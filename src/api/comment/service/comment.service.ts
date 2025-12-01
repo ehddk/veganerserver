@@ -10,9 +10,9 @@ export class CommentServicesImpl implements CommentService {
   constructor(commentRepository: CommentRepository) {
     this._commentRepository = commentRepository;
   }
-  async getComments(): Promise<CommentResponseDTO[]> {
+  async getComments(article_id: string): Promise<CommentResponseDTO[]> {
     try {
-      const values = await this._commentRepository.findAll();
+      const values = await this._commentRepository.findAll(article_id);
       return values;
     } catch (error) {
       throw new Error("목록 조회 중 실패");
@@ -32,7 +32,7 @@ export class CommentServicesImpl implements CommentService {
   }
 
   async createComment(
-    comment: Omit<IComment, "id">
+    comment: Omit<IComment, "id" | "createdAt" | "updatedAt">
   ): Promise<CommentResponseDTO> {
     try {
       const newComment = await this._commentRepository.save(comment);
@@ -45,7 +45,7 @@ export class CommentServicesImpl implements CommentService {
 
   async updateComment(
     id: string,
-    commentInfo: Omit<CommentResponseDTO, "id" | "author_id" | "createdAt">
+    commentInfo: Omit<CommentResponseDTO, "id" | "user_id" | "createdAt">
   ): Promise<void> {
     try {
       const updatedComment = await this._commentRepository.update(
