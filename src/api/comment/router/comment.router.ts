@@ -4,6 +4,7 @@ export const commentRouter = express.Router();
 import { DbCommentRepository } from "../repository/dbComment.repository";
 import { CommentServicesImpl } from "../service/comment.service";
 import { authRoleMiddleware } from "@/api/common/middlewares/authRole.middleware";
+import { pool } from "@/config/database";
 
 const COMMENT_ROUTES = {
   GET_COMMENTS: "/:article_id",
@@ -14,7 +15,7 @@ const COMMENT_ROUTES = {
 };
 
 const commentController = new CommentController(
-  new CommentServicesImpl(new DbCommentRepository())
+  new CommentServicesImpl(new DbCommentRepository(pool))
 );
 
 commentRouter.get(COMMENT_ROUTES.GET_COMMENTS, commentController.getComments);

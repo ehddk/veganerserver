@@ -8,12 +8,16 @@ export interface IComment {
   updatedAt?: Date;
 }
 
+export interface PaginatedComments {
+  items: IComment[];
+  total: number;
+}
 /** 댓글 목록 조회 */
-type getCommentsRequestPath = {};
+type getCommentsRequestPath = { limit?: number; offset?: number };
 type getCommentsRequestParams = { article_id: string };
 
 type getCommentsRequest = {
-  path?: getCommentsRequestPath;
+  path: getCommentsRequestPath;
   params: getCommentsRequestParams;
   body?: {};
 };

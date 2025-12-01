@@ -1,5 +1,8 @@
 import HttpException from "@/api/common/exceptions/http.exception";
-import { CommentResponseDTO } from "../dto/commentReponse.dto";
+import {
+  CommentResponseDTO,
+  PaginatedCommentResponseDTO,
+} from "../dto/commentReponse.dto";
 import { CommentRepository } from "../repository/comment.repository";
 import { CommentService } from "./comment.service.type";
 import { IComment } from "../@types/comment.api";
@@ -10,9 +13,18 @@ export class CommentServicesImpl implements CommentService {
   constructor(commentRepository: CommentRepository) {
     this._commentRepository = commentRepository;
   }
-  async getComments(article_id: string): Promise<CommentResponseDTO[]> {
+  async getComments(
+    article_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedCommentResponseDTO> {
     try {
-      const values = await this._commentRepository.findAll(article_id);
+      const values = await this._commentRepository.findAll(
+        article_id,
+
+        limit,
+        offset
+      );
       return values;
     } catch (error) {
       throw new Error("목록 조회 중 실패");

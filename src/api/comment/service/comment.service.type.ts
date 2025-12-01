@@ -1,8 +1,15 @@
 import { IComment } from "../@types/comment.api";
-import { CommentResponseDTO } from "../dto/commentReponse.dto";
+import {
+  CommentResponseDTO,
+  PaginatedCommentResponseDTO,
+} from "../dto/commentReponse.dto";
 
 export interface CommentService {
-  getComments(article_id: string): Promise<CommentResponseDTO[]>;
+  getComments(
+    article_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedCommentResponseDTO>;
   getCommentById(id: string): Promise<CommentResponseDTO | null>;
   createComment(
     comment: Omit<IComment, "id" | "user" | "createdAt" | "updatedAt">

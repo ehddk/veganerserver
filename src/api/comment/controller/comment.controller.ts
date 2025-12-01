@@ -25,17 +25,37 @@ export default class CommentController {
 
   async getComments(
     req: Request<
-      getCommentsRequest["path"],
-      getCommentsResponse,
+      getCommentsRequest["params"],
       getCommentsRequest["body"],
-      getCommentsRequest["params"]
+      getCommentsResponse,
+      getCommentsRequest["path"]
     >,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const article_id = "1";
-      const values = await this._commentService.getComments(article_id);
+      const article_id = req.params?.article_id;
+      const rawLimit = req.query.limit;
+      const rawOffset = req.query.offset;
+      const parsedLimit = parseInt(
+        Array.isArray(rawLimit) ? rawLimit[0] : rawLimit || "",
+        10
+      );
+      const parsedOffset = parseInt(
+        Array.isArray(rawOffset) ? rawOffset[0] : rawOffset || "",
+        10
+      );
+      const limit: number =
+        isNaN(parsedLimit) || parsedLimit <= 0 ? 15 : parsedLimit;
+      const offset: number =
+        isNaN(parsedOffset) || parsedOffset < 0 ? 0 : parsedOffset;
+
+      // 순서 중요! 컨트롤러 -> 서비스 -> 리포지토리 함수 순서라서.. 일관성이 있는 순서여야함.
+      const values = await this._commentService.getComments(
+        article_id,
+        offset,
+        limit
+      );
       res.status(200).json(values);
       console.log("valuessdsdsd", values);
     } catch (error) {

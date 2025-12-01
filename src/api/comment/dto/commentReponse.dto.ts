@@ -17,3 +17,8 @@ export class CommentResponseDTO {
       (this.updatedAt = params.updatedAt);
   }
 }
+
+export interface PaginatedCommentResponseDTO {
+  items: CommentResponseDTO[];
+  total: number;
+}

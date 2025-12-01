@@ -1,8 +1,14 @@
 import { CommentRepository } from "./comment.repository";
 import { pool } from "../../../config/database";
-import { IComment } from "../@types/comment.api";
+import { IComment, PaginatedComments } from "../@types/comment.api";
+import { Pool } from "pg";
 
 export class DbCommentRepository implements CommentRepository {
+  private readonly pool: Pool;
+  constructor(dbPool: Pool) {
+    this.pool = dbPool;
+  }
+
   async save(
     comment: Omit<IComment, "id" | "createdAt" | "updatedAt">
   ): Promise<IComment> {
@@ -53,12 +59,42 @@ export class DbCommentRepository implements CommentRepository {
     }
   }
 
-  async findAll(article_id: string): Promise<IComment[]> {
-    const aricleId = article_id;
-    const query = `SELECT * FROM comments WHERE article_id = $1 ORDER BY "createdAt" DESC`;
+  async findAll(
+    article_id: string,
+    offset: number,
+    limit: number
+  ): Promise<PaginatedComments> {
+    const articleId = article_id;
+    console.log(
+      `[findAll Debug] 전달된 articleId: ${articleId}, Type: ${typeof articleId}`
+    );
+    console.log(`[findAll Debug] 전달된 limit: ${limit}, offset: ${offset}`);
 
-    const result = await pool.query(query, [aricleId]);
-    return result.rows;
+    const itemsQuery = `SELECT * FROM comments WHERE article_id = $1 ORDER BY "createdAt" DESC LIMIT $2
+        OFFSET $3`;
+
+    const totalQuery = `
+      SELECT COUNT(*)
+      FROM comments
+      WHERE article_id = $1
+    `;
+
+    try {
+      const [itemResult, totalResult] = await Promise.all([
+        this.pool.query(itemsQuery, [articleId, limit, offset]),
+        this.pool.query(totalQuery, [articleId]),
+      ]);
+
+      const totalCount = parseInt(totalResult.rows[0].count, 10);
+
+      return {
+        items: itemResult.rows,
+        total: totalCount,
+      };
+    } catch (error) {
+      console.error("DB Error in findAll:", error);
+      throw new Error("댓글 목록 조회 중 오류 발생");
+    }
   }
 
   async findById(id: string): Promise<IComment | null> {
