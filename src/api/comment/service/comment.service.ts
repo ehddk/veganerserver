@@ -57,13 +57,16 @@ export class CommentServicesImpl implements CommentService {
 
   async updateComment(
     id: string,
+    currentUserId: string,
     commentInfo: Omit<CommentResponseDTO, "id" | "user_id" | "createdAt">
   ): Promise<void> {
     try {
       const updatedComment = await this._commentRepository.update(
         id,
+        currentUserId,
         commentInfo
       );
+      console.log("updatedComment", updatedComment);
       if (!updatedComment) {
         throw new HttpException(404, "해당 댓글을 찾을 수 없습니다.");
       }

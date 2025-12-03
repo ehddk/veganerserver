@@ -11,6 +11,10 @@ export interface CommentRepository {
   save(
     Comment: Omit<IComment, "id" | "createdAt" | "updatedAt">
   ): Promise<IComment>;
-  update(id: string, CommentInfo: Partial<IComment>): Promise<IComment | null>;
+  update(
+    id: string,
+    currentUserId: string,
+    CommentInfo: Partial<IComment>
+  ): Promise<IComment | null>;
   delete(id: string): Promise<void>;
 }

@@ -16,6 +16,7 @@ export interface CommentService {
   ): Promise<CommentResponseDTO>;
   updateComment(
     id: string,
+    currentUserId: string,
     commentInfo: Omit<
       IComment,
       "id" | "user_id" | "article_id" | "user" | "createdAt"

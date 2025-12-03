@@ -30,9 +30,11 @@ commentRouter.post(
 );
 commentRouter.put(
   COMMENT_ROUTES.UPDATE_COMMENT,
+  authRoleMiddleware(["user"]),
   commentController.updateComment
 );
 commentRouter.delete(
   COMMENT_ROUTES.DELETE_COMMENT,
+  authRoleMiddleware(["user"]),
   commentController.deleteComment
 );

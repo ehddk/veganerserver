@@ -118,11 +118,13 @@ export default class CommentController {
     res: Response,
     next: NextFunction
   ) {
-    const { commentId } = req.params;
-    const { content, updatedAt } = req.body;
+    const { id } = req.params;
+    const currentUserId = req.user.userId;
+    console.log("current 댓글 아이디", currentUserId);
     try {
       const values = await this._commentService.updateComment(
-        commentId,
+        id,
+        currentUserId,
         req.body
       );
       res.status(201).json(values);

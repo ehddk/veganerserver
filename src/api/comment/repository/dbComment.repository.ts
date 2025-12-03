@@ -124,6 +124,7 @@ export class DbCommentRepository implements CommentRepository {
 
   async update(
     id: string,
+    currentUserId: string,
     comment: Partial<Omit<IComment, "id" | "createdAt" | "author_id">>
   ): Promise<IComment | null> {
     if (Object.keys(comment).length === 0)
@@ -131,10 +132,11 @@ export class DbCommentRepository implements CommentRepository {
 
     const keys = Object.keys(comment);
     const setClause = keys.map((key, idx) => `${key} = $${idx + 1}`).join(", ");
-    const values = [...keys.map((k) => (comment as any)[k]), id];
+    const values = [...keys.map((k) => (comment as any)[k]), id, currentUserId];
 
-    const query = `UPDATE comments SET ${setClause} WHERE id = $${keys.length + 1}
-      RETURNING id,title,content,author,created_at as "createdAt"
+    const query = `UPDATE comments SET ${setClause}, "updatedAt" = NOW()
+     WHERE id = $${keys.length + 1}::integer AND user_id = $${keys.length + 2}
+      RETURNING id,content,user_id,"user","createdAt", "updatedAt"
     `;
 
     const result = await pool.query(query, values);
