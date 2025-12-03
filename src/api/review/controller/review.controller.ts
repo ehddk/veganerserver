@@ -65,8 +65,12 @@ export default class ReviewController {
       const { content, rating } = req.body;
       const user_id = req.user.userId;
       const numericRating = parseInt(rating as unknown as string, 10);
-      const reviewData: Omit<IReview, "id" | "createdAt" | "updatedAt"> = {
+      const reviewData: Omit<
+        IReview,
+        "id" | "createdAt" | "updatedAt" | "user"
+      > = {
         restaurant_id: restaurant_id,
+
         user_id: user_id,
         content: content,
         rating: numericRating,
@@ -94,6 +98,7 @@ export default class ReviewController {
   ) {
     const { id } = req.params;
     const currentUserId = req.user.userId;
+    console.log("current", currentUserId);
     try {
       await this._reviewService.updateReview(id, currentUserId, req.body);
       res.status(204).json();

@@ -39,9 +39,7 @@ type createCommentRequest = {
 type createCommentResponse = IComment;
 
 /** 댓글 수정 */
-type updateCommentRequestPath = {
-  commentId: string;
-};
+type updateCommentRequestPath = { id: string };
 type updateCommentRequestBody = {
   content: string;
   updatedAt: Date;
