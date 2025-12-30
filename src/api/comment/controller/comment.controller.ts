@@ -143,9 +143,9 @@ export default class CommentController {
     res: Response,
     next: NextFunction
   ) {
-    const { commentId } = req.params;
+    const { article_id, id } = req.params;
     try {
-      const values = await this._commentService.deleteComment(commentId);
+      const values = await this._commentService.deleteComment(article_id, id);
       res.status(201).json(values);
     } catch (error) {
       throw new HttpException(404, "삭제 중 오류 발생");

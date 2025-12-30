@@ -55,7 +55,8 @@ type updateCommentResponse = IComment;
 
 /** 댓글 삭제 */
 type deleteCommentRequestPath = {
-  commentId: string;
+  article_id: string;
+  id: string;
 };
 
 type deleteCommentRequest = {

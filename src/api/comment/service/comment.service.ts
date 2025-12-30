@@ -75,7 +75,7 @@ export class CommentServicesImpl implements CommentService {
     }
   }
 
-  async deleteComment(id: string): Promise<void> {
+  async deleteComment(article_id: string, id: string): Promise<void> {
     try {
       await this._commentRepository.delete(id);
     } catch (error) {

@@ -22,5 +22,5 @@ export interface CommentService {
       "id" | "user_id" | "article_id" | "user" | "createdAt"
     >
   ): Promise<void>;
-  deleteComment(id: string): Promise<void>;
+  deleteComment(article_id: string, id: string): Promise<void>;
 }
