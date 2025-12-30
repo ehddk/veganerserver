@@ -60,7 +60,7 @@ export default class ArticleController {
     next: NextFunction
   ) {
     const { id } = req.params;
-    console.log("id는!!!", id);
+
     try {
       const values = await this._articleService.getArticleById(id);
       res.status(200).json(values);

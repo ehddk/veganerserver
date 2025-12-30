@@ -19,7 +19,10 @@ export interface ArticleService {
 
   updateArticle(
     id: string,
-    articleInfo: Omit<IArticle, "id" | "author_id" | "author" | "createdAt">
+    articleInfo: Omit<
+      IArticle,
+      "id" | "author_id" | "author" | "createdAt" | "viewCount"
+    >
   ): Promise<void>;
 
   deleteArticle(id: string): Promise<void>;

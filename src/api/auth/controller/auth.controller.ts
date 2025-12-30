@@ -26,7 +26,6 @@ export default class AuthController {
     next: NextFunction
   ) {
     const { id } = req.params;
-    console.log("id는!!!", id);
 
     try {
       const values = await this._authService.getAuthById(id);

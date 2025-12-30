@@ -8,6 +8,7 @@ export class ArticleResponseDTO {
   author: string;
   createdAt: Date;
   updatedAt?: Date;
+  viewCount: number;
 
   //이렇게 생성자에 속성을 할당해야하는 이유: 타입안정성을 위함.
   // 해당 클래스의 인스턴스가 생성되는 시점(=생성자)에 내가 필요한 속성(id,author_id 등등)에 유효값이 할당 되는지를 반드시 확인해야한다.
@@ -21,6 +22,7 @@ export class ArticleResponseDTO {
     this.author = params.author;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+    this.viewCount = params.viewCount;
   }
 }
 

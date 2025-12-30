@@ -6,6 +6,7 @@ interface IArticle {
   content: string;
   createdAt: Date;
   updatedAt?: Date;
+  viewCount: number;
 }
 
 export interface PaginatedArticles {

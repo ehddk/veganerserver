@@ -25,9 +25,7 @@ export class DbArticleRepository implements ArticleRepository {
   async findAll(limit: number, offset: number): Promise<PaginatedArticles> {
     // 1. 데이터 목록을 가져오는 쿼리
     // $1, $2는 매개변수 배열의 인덱스를 나타냅니다.
-    console.log(
-      `[Repo Debug] 레포: ${limit}, Offset: ${offset}` // 🚨 이 로그 확인!
-    );
+
     const itemsQuery = `
         SELECT * FROM board 
         ORDER BY "createdAt" DESC 
@@ -58,6 +56,10 @@ export class DbArticleRepository implements ArticleRepository {
   }
 
   async findById(id: string): Promise<IArticle | null> {
+    await pool.query(
+      `UPDATE board SET view_count = view_count + 1 WHERE id = $1`,
+      [id]
+    );
     const query = `
     SELECT 
         id,
