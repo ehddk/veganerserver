@@ -33,14 +33,14 @@
     "pg": "^8.17.2",
     "ts-node": "^10.9.2",
     "uuid": "^13.0.0",
-    "yup": "^1.7.1"
+    "yup": "^1.7.1",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "cross-env": "^7.0.3",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "tsx": "^4.20.6"
   }
 }
