@@ -1,5 +1,4 @@
-import express from "express";
-import path from "node:path";
+import express, { ErrorRequestHandler } from "express";
 import { articleRouter } from "./api/article/router/article.router";
 import errorHandler from "./api/common/middlewares/errorHandler.middleware";
 import cors from "cors";
@@ -33,8 +32,6 @@ app.use("/api/restaurant", resRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/auth", authRouter);
 
-app.use(errorHandler);
+app.use(errorHandler as ErrorRequestHandler);
 
-app.listen(4000, () => {
-  console.log(`Server is running on port 4000`);
-});
+export default app;
