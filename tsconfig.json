@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "ESNext" /** 컴파일된 코드가 어떤 버전의 자바스크립트로 컴파일 될지 결정 */,
     "module": "CommonJS",
     "sourceMap": true /** Source map 사용 */,
