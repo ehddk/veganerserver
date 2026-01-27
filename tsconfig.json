@@ -7,7 +7,6 @@
     "sourceMap": true /** Source map 사용 */,
     "declaration": true /** 선언 파일 */,
     "outDir": "./dist" /** 컴파일된 파일 출력 */,
-    "rootDir": "./src",
     "allowJs": true /** 타입스크립트 프로젝트에서 JAVAscript 사용가능 */,
     "baseUrl": "." /** 기본 URL */,
     "noEmit": false /** 컴파일된 파일을 생성하지 않음 */,
