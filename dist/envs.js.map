@@ -1,0 +1,1 @@
+{"version":3,"file":"envs.js","sourceRoot":"","sources":["../src/envs.ts"],"names":[],"mappings":";;;;;AAAA,oDAA4B;AAC5B,0DAA6B;AAC7B,gBAAM,CAAC,MAAM,CAAC;IACZ,IAAI,EAAE,mBAAI,CAAC,IAAI,CAAC,SAAS,EAAE,MAAM,CAAC;CACnC,CAAC,CAAC","sourcesContent":["import dotenv from \"dotenv\";\nimport path from \"node:path\";\ndotenv.config({\n  path: path.join(__dirname, \".env\"),\n});\n"]}
