@@ -1,1 +1,1 @@
-import "@/envs";
+import "./envs";

@@ -22,9 +22,9 @@ app.use((0, cors_1.default)({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.options("*", (req, res) => {
-    res.sendStatus(200);
-});
+// app.options("/(.*)", (req, res) => {
+//   res.sendStatus(200);
+// });
 app.use("/api/articles", article_router_1.articleRouter);
 app.use("/api/comments", comment_router_1.commentRouter);
 app.use("/api/restaurant", res_router_1.resRouter);

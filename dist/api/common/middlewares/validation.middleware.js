@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate = void 0;
 const yup = __importStar(require("yup"));
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 /** 모든 요청 validate 체크 */
 const validate = (schema) => async (req, __, next) => {
     try {

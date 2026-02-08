@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthServicesImpl = void 0;
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 const authResponse_dto_1 = require("../dto/authResponse.dto");
-const crypto_service_1 = require("@/api/common/services/crypto.service");
-const jwt_service_1 = require("@/api/common/services/jwt.service");
+const crypto_service_1 = require("../../../api/common/services/crypto.service");
+const jwt_service_1 = require("../../../api/common/services/jwt.service");
 class AuthServicesImpl {
     _authRepository;
     constructor(authRepository) {

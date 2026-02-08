@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArticleServicesImpl = void 0;
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 const articleResponse_dto_1 = require("../dto/articleResponse.dto");
 class ArticleServicesImpl {
     _articleRepository;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 class CommentController {
     _commentService;
     constructor(commentService) {

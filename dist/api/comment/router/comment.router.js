@@ -9,8 +9,8 @@ const comment_controller_1 = __importDefault(require("../controller/comment.cont
 exports.commentRouter = express_1.default.Router();
 const dbComment_repository_1 = require("../repository/dbComment.repository");
 const comment_service_1 = require("../service/comment.service");
-const authRole_middleware_1 = require("@/api/common/middlewares/authRole.middleware");
-const database_1 = require("@/config/database");
+const authRole_middleware_1 = require("../../../api/common/middlewares/authRole.middleware");
+const database_1 = require("../../../config/database");
 const COMMENT_ROUTES = {
     GET_COMMENTS: "/:article_id",
     GET_COMMENT_BY_ID: "/:article_id/:id",

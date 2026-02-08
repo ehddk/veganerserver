@@ -1,5 +1,5 @@
 import { ArticleResponseDTO, PaginatedArticleResponseDTO } from "../dto/articleResponse.dto";
-import { ArticleRepository } from "@/api/article/repository/article.repository";
+import { ArticleRepository } from "../../../api/article/repository/article.repository";
 import { ArticleService } from "./article.service.type";
 import { IArticle } from "../@types/article.type";
 export declare class ArticleServicesImpl implements ArticleService {

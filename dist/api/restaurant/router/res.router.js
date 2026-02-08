@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const dbRes_repository_1 = require("../repository/dbRes.repository");
 const res_controller_1 = require("../controller/res.controller");
 const res_service_1 = require("../service/res.service");
-const database_1 = require("@/config/database");
+const database_1 = require("../../../config/database");
 exports.resRouter = express_1.default.Router();
 const RESTAURANT_ROUTES = {
     GET_RES: "/api/restaurant",

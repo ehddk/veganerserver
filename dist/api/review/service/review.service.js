@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewServicesImpl = void 0;
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 const ReviewResponse_dto_1 = require("../dto/ReviewResponse.dto");
 class ReviewServicesImpl {
     _reviewRepository;

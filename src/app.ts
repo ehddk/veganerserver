@@ -22,9 +22,9 @@ app.use(
   })
 );
 
-app.options("*", (req, res) => {
-  res.sendStatus(200);
-});
+// app.options("/(.*)", (req, res) => {
+//   res.sendStatus(200);
+// });
 
 app.use("/api/articles", articleRouter);
 app.use("/api/comments", commentRouter);

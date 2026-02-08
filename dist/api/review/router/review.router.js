@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reviewRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const database_1 = require("@/config/database");
+const database_1 = require("../../../config/database");
 const dbReview_repository_1 = require("../repository/dbReview.repository");
 const review_service_1 = require("../service/review.service");
 const review_controller_1 = __importDefault(require("../controller/review.controller"));
-const authRole_middleware_1 = require("@/api/common/middlewares/authRole.middleware");
+const authRole_middleware_1 = require("../../../api/common/middlewares/authRole.middleware");
 exports.reviewRouter = express_1.default.Router();
 // const REVIEW_ROUTES = {
 //   GET_REVIEW: "/api/review",

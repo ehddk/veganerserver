@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResServicesImpl = void 0;
-const http_exception_1 = __importDefault(require("@/api/common/exceptions/http.exception"));
+const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 const RestaurantResponse_dto_1 = require("../dto/RestaurantResponse.dto");
 const res_model_1 = require("../model/res.model");
 const API_PAGE_SIZE = 1000;

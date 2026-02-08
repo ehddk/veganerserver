@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const article_service_1 = require("../service/article.service");
 const article_controller_1 = __importDefault(require("../controller/article.controller"));
 const dbArticle_repository_1 = require("../repository/dbArticle.repository");
-const authRole_middleware_1 = require("@/api/common/middlewares/authRole.middleware");
+const authRole_middleware_1 = require("../../../api/common/middlewares/authRole.middleware");
 exports.articleRouter = express_1.default.Router();
 const ARTICLE_ROUTES = {
     GET_ARTICLES: "/api/articles",
