@@ -1,6 +1,6 @@
 // index.ts
 
-import "@/envs";
+import "./envs";
 
 import app from "./app";
 
