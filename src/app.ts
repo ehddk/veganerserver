@@ -25,6 +25,9 @@ app.use(
 // app.options("/(.*)", (req, res) => {
 //   res.sendStatus(200);
 // });
+app.get("/", (req, res) => {
+  res.send("서버가 정상적으로 동작 중입니다!");
+});
 
 app.use("/api/articles", articleRouter);
 app.use("/api/comments", commentRouter);
