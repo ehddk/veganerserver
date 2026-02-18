@@ -25,6 +25,8 @@ type IRestaurant = {
   cgg_code_name?: string;
   /*전화번호 */
   tel_no?: string;
+  /*이미지  */
+  image_url?: string[];
 };
 
 /**조회 */
