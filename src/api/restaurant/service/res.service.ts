@@ -3,6 +3,7 @@ import { RestaurantResponseDTO } from "../dto/RestaurantResponse.dto";
 import { RestuarantRepository } from "../repository/res.repository";
 import { RestaurantService } from "./res.service.type";
 import { mapOpenApiToDbModel } from "../model/res.model";
+import { crawlImages } from "@/utils/imageCrawler";
 
 const API_PAGE_SIZE = 1000;
 
@@ -54,14 +55,39 @@ export class ResServicesImpl implements RestaurantService {
     }
 
     const dbRecords = allRecords.map(mapOpenApiToDbModel);
-    await this._resRepository.saveBatch(dbRecords);
+    await this._resRepository.saveBatch(dbRecords as IRestaurant[]);
   }
+
   async getRestaurants(): Promise<IRestaurant[]> {
     try {
       const values = await this._resRepository.findAll();
 
-      return values;
+      // 결과물을 담을 배열
+      const updatedRestaurants: IRestaurant[] = [];
+
+      // Promise.all 대신 순차적으로 하나씩 처리
+      for (const res of values) {
+        if (!res.image_url || res.image_url.length === 0) {
+          try {
+            // 하나씩 기다리며 실행 (await)
+            const newImages = await crawlImages(res.upso_name);
+
+            if (newImages && newImages.length > 0) {
+              if (res.id) {
+                await this._resRepository.saveImages(res.id, newImages);
+              }
+              res.image_url = newImages;
+            }
+          } catch (crawlError) {
+            console.error(`Crawling failed for ${res.upso_name}:`, crawlError);
+          }
+        }
+        updatedRestaurants.push(res);
+      }
+
+      return updatedRestaurants;
     } catch (error) {
+      console.error("Error in getRestaurants:", error);
       throw new Error("목록 조회 중 오류 발생");
     }
   }
