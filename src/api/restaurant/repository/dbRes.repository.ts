@@ -8,10 +8,17 @@ export class DbRestaurantRepository implements RestuarantRepository {
     this.pool = dbPool;
   }
 
+  async saveImages(id: string, imageUrl: string[]) {
+    await this.pool.query(
+      `UPDATE restaurants SET image_url = $1 WHERE id = $2`,
+      [imageUrl, id]
+    );
+  }
+
   async save(restaurant: Omit<IRestaurant, "id">): Promise<IRestaurant> {
     const query = `
          INSERT INTO restaurants (upso_name,rdn_code,source_type,ctfc_gbn_name,cgg_code_name,tel_no)
-         VALUES ($1, $2, $3, $4)
+         VALUES ($1, $2, $3, $4, $5, $6)
                  RETURNING *
         `;
 
@@ -86,10 +93,9 @@ export class DbRestaurantRepository implements RestuarantRepository {
   }
 
   async findAll(): Promise<IRestaurant[]> {
-    const itemsQuery = ` SELECT * FROM restaurants WHERE ctfc_gbn_name = '채식음식점';`;
+    const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점';`;
 
     const itemResult = await this.pool.query(itemsQuery, []);
-
     return itemResult.rows;
   }
 
@@ -97,7 +103,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
     const query = `
         SELECT 
          id,
-         upso_name,rdn_code,source_type,category,ctfc_gbn_name,cgg_code_name,tel_no
+         upso_name,rdn_code,source_type,category,ctfc_gbn_name,cgg_code_name,tel_no,image_url
         FROM
          restaurants
         WHERE id = $1
