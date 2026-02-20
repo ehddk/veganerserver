@@ -61,15 +61,20 @@ export class ResServicesImpl implements RestaurantService {
   async getRestaurants(): Promise<IRestaurant[]> {
     try {
       const values = await this._resRepository.findAll();
-
       // 결과물을 담을 배열
       const updatedRestaurants: IRestaurant[] = [];
 
       // Promise.all 대신 순차적으로 하나씩 처리
       for (const res of values) {
-        if (!res.image_url || res.image_url.length === 0) {
+        const hasNoImage =
+          !res.image_url ||
+          !Array.isArray(res.image_url) ||
+          res.image_url.filter((url) => url !== null && url !== "").length ===
+            0;
+        if (hasNoImage) {
           try {
             // 하나씩 기다리며 실행 (await)
+
             const newImages = await crawlImages(res.upso_name);
 
             if (newImages && newImages.length > 0) {
