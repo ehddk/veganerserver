@@ -1,6 +1,8 @@
+import "dotenv/config";
 import { pool } from "@/config/database";
 import { RestuarantRepository } from "./res.repository";
 import { Pool } from "pg";
+const { createClient } = require("@supabase/supabase-js");
 
 export class DbRestaurantRepository implements RestuarantRepository {
   private readonly pool: Pool;
@@ -8,13 +10,55 @@ export class DbRestaurantRepository implements RestuarantRepository {
     this.pool = dbPool;
   }
 
-  async saveImages(id: string, imageUrl: string[]) {
+  async saveImages(id: string, imageUrls: string[]) {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const uploadedUrls: string[] = [];
+
+    for (const imageUrl of imageUrls) {
+      try {
+        const response = await fetch(imageUrl, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            Referer: new URL(imageUrl).origin,
+          },
+        });
+
+        const contentType = response.headers.get("Content-Type") ?? "";
+        console.log("contentType:", contentType, response.ok);
+        if (!response.ok || contentType.includes("text/html")) continue;
+
+        const buffer = await response.arrayBuffer();
+        const ext = contentType.split("/")[1]?.split(";")[0] ?? "jpg";
+        const path = `restaurants/${id}_${Date.now()}.${ext}`;
+
+        const { error } = await supabase.storage
+          .from("restaurant-image")
+          .upload(path, buffer, { contentType, upsert: true });
+
+        if (error) continue;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("restaurant-image").getPublicUrl(path);
+
+        uploadedUrls.push(publicUrl);
+      } catch (e) {
+        console.error(`이미지 업로드 실패: ${imageUrl}`, e);
+      }
+    }
+
+    // 업로드된 URL이 없으면 DB 업데이트 안 함
+    if (uploadedUrls.length === 0) return;
+
     await this.pool.query(
       `UPDATE restaurants SET image_url = $1 WHERE id = $2`,
-      [imageUrl, id]
+      [uploadedUrls, Number(id)]
     );
   }
-
   async save(restaurant: Omit<IRestaurant, "id">): Promise<IRestaurant> {
     const query = `
          INSERT INTO restaurants (upso_name,rdn_code,source_type,ctfc_gbn_name,cgg_code_name,tel_no)
@@ -93,9 +137,10 @@ export class DbRestaurantRepository implements RestuarantRepository {
   }
 
   async findAll(): Promise<IRestaurant[]> {
-    const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점';`;
+    const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점'`;
 
     const itemResult = await this.pool.query(itemsQuery, []);
+
     return itemResult.rows;
   }
 
@@ -112,7 +157,6 @@ export class DbRestaurantRepository implements RestuarantRepository {
 
     try {
       const result = await this.pool.query(query, [id]);
-      // console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
       return result.rows[0];
     } catch (error) {
       console.error("failed", error);
