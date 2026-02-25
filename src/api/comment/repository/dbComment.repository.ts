@@ -22,7 +22,6 @@ export class DbCommentRepository implements CommentRepository {
       if (userResult.rows[0]) {
         userName = userResult.rows[0]["name"];
       }
-      console.log(`[Repo Debug] 조회된 userName: ${userName}`);
     } catch (error) {
       console.error(
         `[CommentRepo ERROR] Failed to fetch user name with query: "${userQuery}"`,
@@ -114,7 +113,6 @@ export class DbCommentRepository implements CommentRepository {
 `;
     try {
       const result = await pool.query(query, [id]);
-      console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
       return result.rows[0] || null;
     } catch (error) {
       console.error("failed", error);

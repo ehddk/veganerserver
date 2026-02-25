@@ -56,7 +56,7 @@ export class ArticleServicesImpl implements ArticleService {
         id,
         articleInfo
       );
-      console.log("업데이트", updatedArticle);
+
       if (!updatedArticle) {
         throw new HttpException(404, "해당 게시글을 찾을 수 없습니다.");
       }
@@ -67,6 +67,7 @@ export class ArticleServicesImpl implements ArticleService {
   async deleteArticle(id: string): Promise<void> {
     try {
       await this._articleRepository.delete(id);
+      console.log("게시글 삭제 완료");
     } catch (error) {
       throw new Error("게시글 삭제 중 오류 발생");
     }

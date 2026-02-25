@@ -76,7 +76,6 @@ export class DbArticleRepository implements ArticleRepository {
 `;
     try {
       const result = await pool.query(query, [id]);
-      console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
       return result.rows[0] || null;
     } catch (error) {
       console.error("failed", error);
@@ -88,7 +87,6 @@ export class DbArticleRepository implements ArticleRepository {
     id: string,
     article: Partial<Omit<IArticle, "id" | "createdAt" | "author_id">>
   ): Promise<IArticle | null> {
-    console.log("ID 타입:", typeof id, "값:", id);
     if (Object.keys(article).length === 0)
       throw new Error("수정할 항목이 없습니다.");
 
@@ -96,7 +94,7 @@ export class DbArticleRepository implements ArticleRepository {
 
     const setClause = keys.map((key, idx) => `${key} = $${idx + 1}`).join(", ");
     const values = [...keys.map((k) => (article as any)[k]), id];
-    console.log("values:", values);
+
     const query = `UPDATE board SET ${setClause}, "updatedAt" = NOW() 
     WHERE id = $${keys.length + 1}::integer
     RETURNING id, title, content, author, "createdAt", "updatedAt"

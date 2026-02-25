@@ -41,7 +41,7 @@ export class AuthServicesImpl implements AuthService {
   async getAuthById(id: string): Promise<AuthResponseDTO> {
     try {
       const auth = await this._authRepository.findById(id);
-      console.log("서비스에서", auth);
+
       if (!auth) {
         throw new HttpException(404, "해당 계정을 찾을 수 없습니다.");
       }

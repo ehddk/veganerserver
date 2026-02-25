@@ -57,7 +57,6 @@ export default class CommentController {
         limit
       );
       res.status(200).json(values);
-      console.log("valuessdsdsd", values);
     } catch (error) {
       throw new HttpException(404, "목록 조회 중 오류 발생");
     }

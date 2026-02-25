@@ -48,7 +48,6 @@ export class CommentServicesImpl implements CommentService {
   ): Promise<CommentResponseDTO> {
     try {
       const newComment = await this._commentRepository.save(comment);
-      console.log("neww", newComment);
       return new CommentResponseDTO(newComment);
     } catch (error) {
       throw new Error("생성 중 오류 발생");

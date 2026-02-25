@@ -59,7 +59,6 @@ export class DbAuthRepository implements AuthRepository {
           `;
     try {
       const result = await pool.query(query, [id]);
-      console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
       return result.rows[0] || null;
     } catch (error) {
       console.error("failed", error);
