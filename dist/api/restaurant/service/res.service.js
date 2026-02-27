@@ -7,6 +7,7 @@ exports.ResServicesImpl = void 0;
 const http_exception_1 = __importDefault(require("../../../api/common/exceptions/http.exception"));
 const RestaurantResponse_dto_1 = require("../dto/RestaurantResponse.dto");
 const res_model_1 = require("../model/res.model");
+const imageCrawler_1 = require("../../../utils/imageCrawler");
 const API_PAGE_SIZE = 1000;
 class ResServicesImpl {
     _resRepository;
@@ -55,9 +56,35 @@ class ResServicesImpl {
     async getRestaurants() {
         try {
             const values = await this._resRepository.findAll();
-            return values;
+            // 결과물을 담을 배열
+            const updatedRestaurants = [];
+            // Promise.all 대신 순차적으로 하나씩 처리
+            for (const res of values) {
+                const hasNoImage = !res.image_url ||
+                    !Array.isArray(res.image_url) ||
+                    res.image_url.filter((url) => url !== null && url !== "").length ===
+                        0;
+                if (hasNoImage) {
+                    try {
+                        // 하나씩 기다리며 실행 (await)
+                        const newImages = await (0, imageCrawler_1.crawlImages)(res.upso_name);
+                        if (newImages && newImages.length > 0) {
+                            if (res.id) {
+                                await this._resRepository.saveImages(res.id, newImages);
+                            }
+                            res.image_url = newImages;
+                        }
+                    }
+                    catch (crawlError) {
+                        console.error(`Crawling failed for ${res.upso_name}:`, crawlError);
+                    }
+                }
+                updatedRestaurants.push(res);
+            }
+            return updatedRestaurants;
         }
         catch (error) {
+            console.error("Error in getRestaurants:", error);
             throw new Error("목록 조회 중 오류 발생");
         }
     }

@@ -25,6 +25,7 @@ class RestaurantResponseDTO {
     category; // COB_CODE_NM
     cgg_code_name;
     tel_no;
+    image_url;
     constructor(params) {
         this.id = params.id;
         this.category = params.category;
@@ -41,6 +42,7 @@ class RestaurantResponseDTO {
         this.upsoNum = params.upsoNum;
         this.cgg_code_name = params.cgg_code_name;
         this.tel_no = params.tel_no;
+        this.image_url = params.image_url;
     }
 }
 exports.RestaurantResponseDTO = RestaurantResponseDTO;

@@ -16,5 +16,6 @@ export declare class RestaurantResponseDTO {
     category?: string;
     cgg_code_name?: string;
     tel_no?: string;
+    image_url?: string[];
     constructor(params: IRestaurant);
 }
