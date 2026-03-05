@@ -52,14 +52,13 @@ import { createClient } from "@supabase/supabase-js";
 //   };
 // };
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export const authRoleMiddleware = (roles: RoleType[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
       let token: string | undefined;
 
       // Authorization 헤더에서 토큰 추출
@@ -85,7 +84,7 @@ export const authRoleMiddleware = (roles: RoleType[]) => {
       }
 
       const role = user.user_metadata?.role ?? "user";
-
+      const name = user.user_metadata?.name ?? "익명사용자";
       if (!roles.includes(role)) {
         throw new HttpException(403, "권한이 없습니다.");
       }
@@ -93,6 +92,7 @@ export const authRoleMiddleware = (roles: RoleType[]) => {
       req.user = {
         userId: user.id,
         role: role,
+        name: name,
       };
 
       next();
