@@ -67,13 +67,14 @@ export default class ReviewController {
       const numericRating = parseInt(rating as unknown as string, 10);
       const reviewData: Omit<
         IReview,
-        "id" | "createdAt" | "updatedAt" | "user"
+        "id" | "createdAt" | "updatedAt" | "user_name"
       > = {
         restaurant_id: restaurant_id,
 
         user_id: user_id,
         content: content,
         rating: numericRating,
+        user: req.user.name,
       };
 
       const values = await this._reviewService.createReview(reviewData);

@@ -95,11 +95,13 @@ export default class CommentController {
       const { content } = req.body;
 
       const user_id = req.user.userId;
+      const user_name = req.user.name;
       console.log("reqqq::", user_id);
       const values = await this._commentService.createComment({
         content,
         article_id,
         user_id,
+        userName: user_name,
       });
       res.status(201).json(values);
     } catch (error) {
