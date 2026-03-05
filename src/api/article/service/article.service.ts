@@ -44,6 +44,7 @@ export class ArticleServicesImpl implements ArticleService {
       const newArticle = await this._articleRepository.save(article);
       return new ArticleResponseDTO(newArticle);
     } catch (error) {
+      console.error("게시글: 에러", error);
       throw new Error("게시글 생성 중 오류 발생");
     }
   }

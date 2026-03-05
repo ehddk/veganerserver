@@ -37,6 +37,7 @@ export class ReviewServicesImpl implements ReviewService {
       const newReview = await this._reviewRepository.save(review);
       return new ReviewResponseDTO(newReview);
     } catch (error) {
+      console.log("리뷰 생성 중 오류:", error);
       throw new Error("리뷰 생성 중 오류 발생");
     }
   }

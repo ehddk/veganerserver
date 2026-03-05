@@ -6,6 +6,7 @@ export interface IComment {
   content: string;
   createdAt: Date;
   updatedAt?: Date;
+  userName?: string;
 }
 
 export interface PaginatedComments {

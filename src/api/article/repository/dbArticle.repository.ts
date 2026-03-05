@@ -100,12 +100,8 @@ export class DbArticleRepository implements ArticleRepository {
     RETURNING id, title, content, author, "createdAt", "updatedAt"
   `;
     try {
-      console.log("쿼리 실행 시작");
       const result = await pool.query(query, values);
-      console.log("쿼리 실행 완료");
-      console.log("UPDATE 결과:", result);
-      console.log("result.rows:", result.rows);
-      console.log("result.rows[0]:", result.rows[0]);
+
       return result.rows[0] || null;
     } catch (error) {
       console.error("❌ 쿼리 실행 에러 발생!");
