@@ -12,16 +12,19 @@ export class DbCommentRepository implements CommentRepository {
   async save(
     comment: Omit<IComment, "id" | "createdAt" | "updatedAt">
   ): Promise<IComment> {
-    const userQuery = `SELECT "name" FROM "auth" WHERE id = $1`;
-    const userId = comment.user_id;
-    let userName = "익명사용자";
-
+    // const userQuery = `SELECT "name" FROM "auth" WHERE id = $1`;
+    // const userId = comment.user_id;
+    // let userName = "익명사용자";
+    const userQuery = `INSERT INTO comments (content,user_id,article_id,"user") 
+    VALUES ($1,$2,$3,$4) RETURNING *`;
     try {
-      const userResult = await pool.query(userQuery, [userId]);
-
-      if (userResult.rows[0]) {
-        userName = userResult.rows[0]["name"];
-      }
+      const userResult = await pool.query(userQuery, [
+        comment.content,
+        comment.user_id,
+        comment.article_id,
+        comment.userName,
+      ]);
+      return userResult.rows[0];
     } catch (error) {
       console.error(
         `[CommentRepo ERROR] Failed to fetch user name with query: "${userQuery}"`,
@@ -40,7 +43,7 @@ export class DbCommentRepository implements CommentRepository {
         comment.content, // $1
         comment.user_id, // $2: user_id
         comment.article_id, // $3
-        userName, // $4: "user" 컬럼에 저장될 이름
+        comment.userName, // $4: "user" 컬럼에 저장될 이름
       ]);
 
       // console.log("🔍 INSERT 데이터:", result.rows[0].userName);
@@ -64,10 +67,6 @@ export class DbCommentRepository implements CommentRepository {
     limit: number
   ): Promise<PaginatedComments> {
     const articleId = article_id;
-    console.log(
-      `[findAll Debug] 전달된 articleId: ${articleId}, Type: ${typeof articleId}`
-    );
-    console.log(`[findAll Debug] 전달된 limit: ${limit}, offset: ${offset}`);
 
     const itemsQuery = `SELECT * FROM comments WHERE article_id = $1 ORDER BY "createdAt" DESC LIMIT $2
         OFFSET $3`;
