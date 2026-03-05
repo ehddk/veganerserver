@@ -7,6 +7,7 @@ export class CommentResponseDTO {
   user: string;
   createdAt: Date;
   updatedAt?: Date;
+  userName?: string;
 
   constructor(params: IComment) {
     (this.id = params.id),
@@ -15,6 +16,7 @@ export class CommentResponseDTO {
       (this.user = params.user),
       (this.createdAt = params.createdAt),
       (this.updatedAt = params.updatedAt);
+    this.userName = params.userName;
   }
 }
 
