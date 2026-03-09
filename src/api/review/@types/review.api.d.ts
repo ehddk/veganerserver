@@ -8,6 +8,7 @@ type IReview = {
   content: string;
   createdAt: Date;
   updatedAt: Date;
+  image?: string[];
 };
 
 /**조회 */
@@ -33,6 +34,7 @@ type createReviewRequestParams = {};
 type createReviewRequestBody = {
   content: string;
   rating: number;
+  image?: string[];
 };
 
 type createReviewRequest = {
@@ -49,6 +51,7 @@ type UpdateReviewRequestBody = {
   rating: number;
   content: string;
   updatedAt: Date;
+  image?: string[];
 };
 
 type updateReviewRequest = {

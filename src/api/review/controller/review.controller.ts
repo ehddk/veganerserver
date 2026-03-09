@@ -62,7 +62,7 @@ export default class ReviewController {
     try {
       const { restaurant_id } = req.params;
 
-      const { content, rating } = req.body;
+      const { content, rating, image } = req.body;
       const user_id = req.user.userId;
       const numericRating = parseInt(rating as unknown as string, 10);
       const reviewData: Omit<
@@ -75,6 +75,7 @@ export default class ReviewController {
         content: content,
         rating: numericRating,
         user: req.user.name,
+        image: image,
       };
 
       const values = await this._reviewService.createReview(reviewData);

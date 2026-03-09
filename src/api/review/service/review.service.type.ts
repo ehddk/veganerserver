@@ -11,7 +11,7 @@ export interface ReviewService {
   ): Promise<PaginatedReviewResponseDTO>;
 
   createReview(
-    review: Omit<IReview, "id" | "createdAt" | "updatedAt" | "user">
+    review: Omit<IReview, "id" | "createdAt" | "updatedAt" | "user_name">
   ): Promise<ReviewResponseDTO>;
 
   updateReview(
@@ -19,7 +19,7 @@ export interface ReviewService {
     currentUserId: string,
     reviewInfo: Omit<
       IReview,
-      "id" | "user_id" | "restaurant_id" | "createdAt" | "user"
+      "id" | "user_id" | "restaurant_id" | "createdAt" | "user" | "user_name"
     >
   ): Promise<void>;
   deleteReview(id: string): Promise<void>;

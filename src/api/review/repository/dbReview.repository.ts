@@ -15,8 +15,8 @@ export class DbReviewRepository implements ReviewRepository {
   async save(
     review: Omit<IReview, "id" | "createdAt" | "updatedAt">
   ): Promise<IReview> {
-    const query = `INSERT INTO review (user_id,restaurant_id,rating,content,"user")
-    VALUES ($1,$2,$3,$4,$5) RETURNING *`;
+    const query = `INSERT INTO review (user_id,restaurant_id,rating,content,"user",image)
+    VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`;
 
     const result = await this.pool.query(query, [
       review.user_id,
@@ -24,6 +24,7 @@ export class DbReviewRepository implements ReviewRepository {
       review.rating,
       review.content,
       review.user,
+      review.image,
     ]);
 
     return result.rows[0];
@@ -92,7 +93,7 @@ export class DbReviewRepository implements ReviewRepository {
     const values = [...keys.map((k) => (review as any)[k]), id, currentUserId];
     const query = `UPDATE review SET ${setClause}, "updatedAt" = NOW()
      WHERE id = $${keys.length + 1}::integer AND user_id = $${keys.length + 2}
-      RETURNING id, restaurant_id , rating, content, user_id, "user","createdAt", "updatedAt"
+      RETURNING id, restaurant_id , rating, content, user_id, "user","createdAt", "updatedAt",image
      `;
     try {
       const result = await this.pool.query(query, values);
