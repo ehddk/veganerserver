@@ -12,6 +12,9 @@ export const pool = new Pool({
   ssl: { rejectUnauthorized: false }, //render는 ssl 필수
 });
 
+console.log("DB_HOST:", process.env.DB_HOST); // ← 추가
+console.log("DB_USER:", process.env.DB_USER);
+
 pool.on("connect", () => {
   console.log("Connected to the database");
 });
