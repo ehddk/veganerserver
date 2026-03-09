@@ -25,6 +25,9 @@ app.use((0, cors_1.default)({
 // app.options("/(.*)", (req, res) => {
 //   res.sendStatus(200);
 // });
+app.get("/", (req, res) => {
+    res.send("서버가 정상적으로 동작 중입니다!");
+});
 app.use("/api/articles", article_router_1.articleRouter);
 app.use("/api/comments", comment_router_1.commentRouter);
 app.use("/api/restaurant", res_router_1.resRouter);

@@ -7,5 +7,5 @@ export default class ArticleController {
     getArticleById(req: Request<getArticleRequest["path"], getArticleRequest["body"], getArticleRequest["params"], getArticleResponse>, res: Response, next: NextFunction): Promise<void>;
     createArticle(req: Request<createArticleRequest["params"], createArticleResponse, createArticleRequest["body"], createArticleRequest["path"]>, res: Response, next: NextFunction): Promise<void>;
     updateArticle(req: Request<updateArticleRequest["path"], updateArticleResponse, updateArticleRequest["body"], updateArticleRequest["params"]>, res: Response, next: NextFunction): Promise<void>;
-    deleteArticle(req: Request<deleteArticleRequest["path"], deleteArticleRequest["body"], deleteArticleRequest["params"], deleteArticleResponse>, res: Response, next: NextFunction): Promise<void>;
+    deleteArticle(req: Request<deleteArticleRequest["path"], deleteArticleResponse, deleteArticleRequest["body"], deleteArticleRequest["params"]>, res: Response, next: NextFunction): Promise<void>;
 }

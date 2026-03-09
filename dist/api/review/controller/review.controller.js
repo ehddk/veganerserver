@@ -32,7 +32,7 @@ class ReviewController {
     async createReview(req, res, next) {
         try {
             const { restaurant_id } = req.params;
-            const { content, rating } = req.body;
+            const { content, rating, image } = req.body;
             const user_id = req.user.userId;
             const numericRating = parseInt(rating, 10);
             const reviewData = {
@@ -40,6 +40,8 @@ class ReviewController {
                 user_id: user_id,
                 content: content,
                 rating: numericRating,
+                user: req.user.name,
+                image: image,
             };
             const values = await this._reviewService.createReview(reviewData);
             res.status(201).json(values);

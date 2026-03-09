@@ -6,6 +6,7 @@ export declare class CommentResponseDTO {
     user: string;
     createdAt: Date;
     updatedAt?: Date;
+    userName?: string;
     constructor(params: IComment);
 }
 export interface PaginatedCommentResponseDTO {

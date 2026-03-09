@@ -58,7 +58,7 @@ class ArticleController {
     }
     async updateArticle(req, res, next) {
         const { id } = req.params;
-        console.log("수정 id", req.body);
+        console.log("수정 id", req.params.id);
         try {
             await this._articleService.updateArticle(id, req.body);
             res.status(204).json();

@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const node_path_1 = __importDefault(require("node:path"));
 dotenv_1.default.config({
-    path: node_path_1.default.join(__dirname, ".env"),
+    path: node_path_1.default.join(__dirname, "../.env"),
 });
 //# sourceMappingURL=envs.js.map

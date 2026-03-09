@@ -35,7 +35,6 @@ class CommentServicesImpl {
     async createComment(comment) {
         try {
             const newComment = await this._commentRepository.save(comment);
-           
             return new commentReponse_dto_1.CommentResponseDTO(newComment);
         }
         catch (error) {

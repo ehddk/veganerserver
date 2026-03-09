@@ -39,13 +39,13 @@ class ArticleServicesImpl {
             return new articleResponse_dto_1.ArticleResponseDTO(newArticle);
         }
         catch (error) {
+            console.error("게시글: 에러", error);
             throw new Error("게시글 생성 중 오류 발생");
         }
     }
     async updateArticle(id, articleInfo) {
         try {
             const updatedArticle = await this._articleRepository.update(id, articleInfo);
-            console.log("업데이트", updatedArticle);
             if (!updatedArticle) {
                 throw new http_exception_1.default(404, "해당 게시글을 찾을 수 없습니다.");
             }
@@ -57,6 +57,7 @@ class ArticleServicesImpl {
     async deleteArticle(id) {
         try {
             await this._articleRepository.delete(id);
+            console.log("게시글 삭제 완료");
         }
         catch (error) {
             throw new Error("게시글 삭제 중 오류 발생");

@@ -10,8 +10,6 @@ class DbRestaurantRepository {
         this.pool = dbPool;
     }
     async saveImages(id, imageUrls) {
-        // console.log("SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-        // console.log("saveImages 시작:", id, imageUrls);
         const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
         const uploadedUrls = [];
         for (const imageUrl of imageUrls) {
@@ -109,9 +107,6 @@ class DbRestaurantRepository {
     async findAll() {
         const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점'`;
         const itemResult = await this.pool.query(itemsQuery, []);
-        itemResult.rows.slice(0, 3).forEach((row) => {
-            console.log("image_url:", row.image_url, "type:", typeof row.image_url, "isArray:", Array.isArray(row.image_url));
-        });
         return itemResult.rows;
     }
     async findById(id) {
@@ -126,7 +121,6 @@ class DbRestaurantRepository {
     `;
         try {
             const result = await this.pool.query(query, [id]);
-            // console.log("[Repo Debug] Query executed. Row Count:", result.rowCount);
             return result.rows[0];
         }
         catch (error) {

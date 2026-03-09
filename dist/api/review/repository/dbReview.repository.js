@@ -8,36 +8,15 @@ class DbReviewRepository {
         this.pool = dbPool;
     }
     async save(review) {
-        const userId = review.user_id;
-        let userName = "익명사용자";
-        const userQuery = `SELECT "${AUTH_NAME_COLUMN}" FROM "auth" WHERE id = $1`;
-        try {
-            const userResult = await this.pool.query(userQuery, [userId]);
-            // 이름이 조회되면 userName 업데이트
-            if (userResult.rows[0]) {
-                userName = userResult.rows[0][AUTH_NAME_COLUMN];
-            }
-        }
-        catch (error) {
-            // 🚨 쿼리 실패 시 (테이블/컬럼 이름 오류 등) 여기서 잡아서 로그 출력
-            // 이 로그에 SQL 에러 메시지가 담겨 문제의 원인(틀린 테이블/컬럼 이름)을 알려줄 것입니다.
-            console.error(`[ReviewRepo ERROR] Failed to fetch user name with query: "${userQuery}"`, error);
-            // 에러가 발생해도 userName은 기본값인 '익명사용자'를 유지하고 계속 진행합니다.
-        }
-        // const userName = userResult.rows[0]
-        //   ? userResult.rows[0]["name"]
-        //   : "익명사용자";
-        const query = `
-      INSERT INTO review (user_id,restaurant_id,rating,content, "user" )
-      VALUES ($1, $2, $3, $4, $5)
-              RETURNING *
-    `;
+        const query = `INSERT INTO review (user_id,restaurant_id,rating,content,"user",image)
+    VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`;
         const result = await this.pool.query(query, [
             review.user_id,
             review.restaurant_id,
             review.rating,
             review.content,
-            userName,
+            review.user,
+            review.image,
         ]);
         return result.rows[0];
     }
@@ -89,7 +68,7 @@ class DbReviewRepository {
         const values = [...keys.map((k) => review[k]), id, currentUserId];
         const query = `UPDATE review SET ${setClause}, "updatedAt" = NOW()
      WHERE id = $${keys.length + 1}::integer AND user_id = $${keys.length + 2}
-      RETURNING id, restaurant_id , rating, content, user_id, "user","createdAt", "updatedAt"
+      RETURNING id, restaurant_id , rating, content, user_id, "user","createdAt", "updatedAt",image
      `;
         try {
             const result = await this.pool.query(query, values);

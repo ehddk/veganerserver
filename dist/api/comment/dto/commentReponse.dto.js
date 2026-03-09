@@ -8,6 +8,7 @@ class CommentResponseDTO {
     user;
     createdAt;
     updatedAt;
+    userName;
     constructor(params) {
         (this.id = params.id),
             (this.user_id = params.user_id),
@@ -15,6 +16,7 @@ class CommentResponseDTO {
             (this.user = params.user),
             (this.createdAt = params.createdAt),
             (this.updatedAt = params.updatedAt);
+        this.userName = params.userName;
     }
 }
 exports.CommentResponseDTO = CommentResponseDTO;
