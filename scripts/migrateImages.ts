@@ -17,11 +17,19 @@ const pool = new Pool({
 });
 
 async function migrateImages() {
-  const { rows } = await pool.query(
-    `SELECT id, image_url FROM restaurants WHERE image_url::text LIKE '%http%' AND image_url::text NOT LIKE '%supabase.co%'`
-  );
+  const { rows } = await pool.query(`SELECT id, image_url FROM restaurants`);
 
   for (const record of rows) {
+    if (
+      !record.image_url ||
+      record.image_url === "null" ||
+      !String(record.image_url).startsWith("http")
+    ) {
+      console.log(
+        `⚠️ 스킵: ID ${record.id} (유효하지 않은 URL: ${record.image_url})`
+      );
+      continue;
+    }
     try {
       const response = await fetch(record.image_url, {
         headers: {
@@ -61,7 +69,7 @@ async function migrateImages() {
 
       // 기존 PostgreSQL DB 업데이트
       await pool.query(
-        "UPDATE restaurants SET image_url = ARRAY[$1] WHERE id = $2",
+        "UPDATE public.restaurants SET image_url = ARRAY[$1] WHERE id = $2",
         [publicUrl, record.id]
       );
 
