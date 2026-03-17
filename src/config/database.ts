@@ -4,12 +4,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || "5432", 10),
-  ssl: { rejectUnauthorized: false }, //render는 ssl 필수
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 console.log("DB_HOST:", process.env.DB_HOST); // ← 추가
