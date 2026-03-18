@@ -4,7 +4,7 @@ import { RestuarantRepository } from "./res.repository";
 import { Pool } from "pg";
 const { createClient } = require("@supabase/supabase-js");
 
-console.log("SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
 console.log("SERVICE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export class DbRestaurantRepository implements RestuarantRepository {
@@ -15,7 +15,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
 
   async saveImages(id: string, imageUrls: string[]) {
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
