@@ -4,6 +4,9 @@ import { RestuarantRepository } from "./res.repository";
 import { Pool } from "pg";
 const { createClient } = require("@supabase/supabase-js");
 
+console.log("SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log("SERVICE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 export class DbRestaurantRepository implements RestuarantRepository {
   private readonly pool: Pool;
   constructor(dbPool: Pool) {
@@ -128,7 +131,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
     `;
 
     try {
-      await pool.query(query, values);
+      await this.pool.query(query, values);
       console.log(`Successfully batch upserted ${restaurant.length} records.`);
     } catch (error) {
       console.error("Database Batch Upsert error:", error);
