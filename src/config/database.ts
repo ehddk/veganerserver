@@ -8,9 +8,6 @@ export const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-console.log("DB_HOST:", process.env.DB_HOST); // ← 추가
-console.log("DB_USER:", process.env.DB_USER);
-
 pool.on("connect", () => {
   console.log("Connected to the database");
 });

@@ -9,6 +9,6 @@ export async function crawlImages(upsoName: string): Promise<string[]> {
     }
   );
   const json = await images.json();
-  console.log("네이버 응답:", json);
+
   return json.items.map((item: any) => item.link);
 }
