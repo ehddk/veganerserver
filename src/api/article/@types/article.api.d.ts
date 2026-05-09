@@ -32,6 +32,19 @@ declare global {
   };
   type getArticleResponse = IArticle;
 
+  /**작성자별 게시글 조회 */
+  type getArticlesByAuthorIdRequestPath = {
+    author_id: string;
+  };
+
+  type getArticlesByAuthorIdRequestParams = { limit?: number; offset?: number };
+  type getArticlesByAuthorIdRequestBody = {};
+  type getArticlesByAuthorIdRequest = {
+    path: getArticlesByAuthorIdRequestPath;
+    params?: getArticlesByAuthorIdRequestParams;
+    body?: getArticlesByAuthorIdRequestBody;
+  };
+  type getArticlesByAuthorIdResponse = IArticle;
   /**생성 */
   type createArticleRequestPath = {};
   type createArticleRequestParams = {};

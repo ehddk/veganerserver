@@ -9,6 +9,7 @@ export default class ArticleController {
 
     this.getArticles = this.getArticles.bind(this);
     this.getArticleById = this.getArticleById.bind(this);
+    this.getArticleByAuthorId = this.getArticleByAuthorId.bind(this);
     this.createArticle = this.createArticle.bind(this);
     this.updateArticle = this.updateArticle.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
@@ -68,6 +69,44 @@ export default class ArticleController {
       throw new HttpException(404, "게시글 조회 중 오류 발생");
     }
   }
+  async getArticleByAuthorId(
+    req: Request<
+      getArticlesByAuthorIdRequest["path"],
+      getArticlesByAuthorIdRequest["body"],
+      getArticlesByAuthorIdResponse,
+      getArticlesByAuthorIdRequest["params"]
+    >,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { author_id } = req.params;
+
+    const rawLimit = req.query?.limit;
+    const rawOffset = req.query?.offset;
+    const parsedLimit = parseInt(
+      Array.isArray(rawLimit) ? rawLimit[0] : rawLimit || "",
+      10
+    );
+    const parsedOffset = parseInt(
+      Array.isArray(rawOffset) ? rawOffset[0] : rawOffset || "",
+      10
+    );
+    const limit = isNaN(parsedLimit) || parsedLimit <= 0 ? 15 : parsedLimit;
+    const offset = isNaN(parsedOffset) || parsedOffset < 0 ? 0 : parsedOffset;
+
+    try {
+      const values = await this._articleService.getArticlesByAuthorId(
+        author_id,
+        limit,
+        offset
+      );
+      res.status(200).json(values);
+    } catch (error) {
+      console.error("❌ getArticleByAuthorId 컨트롤러 에러:", error);
+      throw new HttpException(404, "작성자 게시글 조회 중 오류 발생");
+    }
+  }
+
   async createArticle(
     req: Request<
       createArticleRequest["params"],

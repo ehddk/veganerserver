@@ -12,7 +12,11 @@ export interface ArticleService {
   ): Promise<PaginatedArticleResponseDTO>;
 
   getArticleById(id: string): Promise<ArticleResponseDTO | null>;
-
+  getArticlesByAuthorId(
+    author_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedArticleResponseDTO>;
   createArticle(
     article: Pick<IArticle, "title" | "content" | "author" | "author_id">
   ): Promise<ArticleResponseDTO>;

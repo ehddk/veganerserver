@@ -30,11 +30,31 @@ export class ArticleServicesImpl implements ArticleService {
       const article = await this._articleRepository.findById(id);
 
       if (!article) {
-        throw new HttpException(404, "해당 게시글을 찾을 수 없습니다.");
+        throw new HttpException(
+          404,
+          "해당 사용자의 게시글을 찾을 수 없습니다."
+        );
       }
       return new ArticleResponseDTO(article);
     } catch (error) {
       throw new Error("게시글 조회 중 오류 발생");
+    }
+  }
+  async getArticlesByAuthorId(
+    author_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedArticleResponseDTO> {
+    try {
+      const values = await this._articleRepository.findByAuthorId(
+        author_id,
+        limit,
+        offset
+      );
+      return values;
+    } catch (error) {
+      console.error("❌ getArticlesByAuthorId 서비스 실패:", error);
+      throw error;
     }
   }
   async createArticle(

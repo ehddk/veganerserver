@@ -4,6 +4,11 @@ export interface ArticleRepository {
   /**목록 조회 */
   findAll(limit: number, offset: number): Promise<PaginatedArticles>;
   findById(id: string): Promise<IArticle | null>;
+  findByAuthorId(
+    author_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedArticles>;
   save(article: Omit<IArticle, "id">): Promise<IArticle>;
   update(id: string, articleInfo: Partial<IArticle>): Promise<IArticle | null>;
   delete(id: string): Promise<void>;

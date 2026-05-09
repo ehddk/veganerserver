@@ -6,14 +6,6 @@ import { DbArticleRepository } from "../repository/dbArticle.repository";
 import { authRoleMiddleware } from "@/api/common/middlewares/authRole.middleware";
 export const articleRouter = express.Router();
 
-const ARTICLE_ROUTES = {
-  GET_ARTICLES: "/api/articles",
-  GET_ARTICLE_BY_ID: "/api/articles/:id",
-  CREATE_ARTICLE: "/api/articles",
-  UPDATE_ARTICLE: "/api/articles/:id",
-  DELETE_ARTICLE: "/api/articles/:id",
-};
-
 const articleController = new ArticleController(
   new ArticleServicesImpl(new DbArticleRepository())
 );
@@ -38,6 +30,7 @@ const articleController = new ArticleController(
 
 articleRouter.get("/", articleController.getArticles);
 articleRouter.get("/:id", articleController.getArticleById);
+articleRouter.get("/author/:author_id", articleController.getArticleByAuthorId);
 articleRouter.post(
   "/",
   authRoleMiddleware(["user"]),

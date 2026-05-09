@@ -83,6 +83,37 @@ export class DbArticleRepository implements ArticleRepository {
     }
   }
 
+  async findByAuthorId(
+    author_id: string,
+    limit: number,
+    offset: number
+  ): Promise<PaginatedArticles> {
+    const itemsQuery = `
+        SELECT id, title, content, TRIM(author) as author, author_id, "createdAt", "updatedAt", view_count as "viewCount"
+        FROM board
+        WHERE author_id = $1
+        ORDER BY "createdAt" DESC
+        LIMIT $2
+        OFFSET $3`;
+
+    const totalQuery = `SELECT COUNT(*) FROM board WHERE author_id = $1`;
+
+    try {
+      const [itemsResult, totalResult] = await Promise.all([
+        pool.query(itemsQuery, [author_id, limit, offset]),
+        pool.query(totalQuery, [author_id]),
+      ]);
+
+      return {
+        items: itemsResult.rows,
+        total: parseInt(totalResult.rows[0].count, 10),
+      };
+    } catch (error) {
+      console.error("❌ findByAuthorId 쿼리 실패:", error);
+      throw error;
+    }
+  }
+
   async update(
     id: string,
     article: Partial<Omit<IArticle, "id" | "createdAt" | "author_id">>
