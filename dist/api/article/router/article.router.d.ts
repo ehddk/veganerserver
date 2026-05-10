@@ -1,1 +1,0 @@
-export declare const articleRouter: import("express-serve-static-core").Router;
