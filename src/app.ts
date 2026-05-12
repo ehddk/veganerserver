@@ -6,6 +6,7 @@ import { commentRouter } from "./api/comment/router/comment.router";
 import { resRouter } from "./api/restaurant/router/res.router";
 import { reviewRouter } from "./api/review/router/review.router";
 import { authRouter } from "./api/auth/router/auth.router";
+import { scrapRouter } from "./api/scrap/router/scrap.router";
 import cookieParser from "cookie-parser";
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/comments", commentRouter);
 app.use("/api/restaurant", resRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/scrap", scrapRouter);
 
 app.use(errorHandler as ErrorRequestHandler);
 
