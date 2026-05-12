@@ -3,6 +3,7 @@ import { DbRestaurantRepository } from "../repository/dbRes.repository";
 import { RestaurantController } from "../controller/res.controller";
 import { ResServicesImpl } from "../service/res.service";
 import { pool } from "@/config/database";
+import { optionalAuthMiddleware } from "@/api/common/middlewares/optionalAuth.middleware";
 
 export const resRouter = express.Router();
 
@@ -18,5 +19,9 @@ const restaurantController = new RestaurantController(
 );
 
 resRouter.get("/", restaurantController.getRestaurants);
-resRouter.get("/:id", restaurantController.getRestaurantById);
+resRouter.get(
+  "/:id",
+  optionalAuthMiddleware,
+  restaurantController.getRestaurantById
+);
 resRouter.post("/", restaurantController.createRestaurant);
