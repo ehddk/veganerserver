@@ -1,7 +1,6 @@
 import HttpException from "@/api/common/exceptions/http.exception";
 import { NextFunction, Request, Response } from "express";
 import { ScrapService } from "../service/scrap.service.type";
-import { parseQueryInt } from "@/utils/query.util";
 
 export default class ScrapController {
   private readonly _scrapService: ScrapService;
@@ -32,14 +31,15 @@ export default class ScrapController {
     try {
       const userId = req.user.userId;
 
-      const rawLimit = req.query.limit;
-      const rawOffset = req.query.offset;
-      const parsedLimit = parseQueryInt(req.query.limit, 15);
-      const parsedOffset = parseQueryInt(req.query.offset, 0, true);
-      const limit = isNaN(parsedLimit) || parsedLimit <= 0 ? 20 : parsedLimit;
-      const offset = isNaN(parsedOffset) || parsedOffset < 0 ? 0 : parsedOffset;
-
-      const result = await this._scrapService.getList(userId, limit, offset);
+      const limit = parseInt(req.query.limit as string, 10);
+      const offset = parseInt(req.query.offset as string, 10);
+      const safeLimit = isNaN(limit) || limit <= 0 ? 15 : limit;
+      const safeOffset = isNaN(offset) || offset < 0 ? 0 : offset;
+      const result = await this._scrapService.getList(
+        userId,
+        safeLimit,
+        safeOffset
+      );
       res.status(200).json(result);
     } catch (error) {
       next(error);
