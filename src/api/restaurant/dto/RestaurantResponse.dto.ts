@@ -23,6 +23,7 @@ export class RestaurantResponseDTO {
   cgg_code_name?: string;
   tel_no?: string;
   image_url?: string[];
+  scrapped_by_me?: boolean;
 
   constructor(params: IRestaurant) {
     this.id = params.id;
@@ -41,5 +42,7 @@ export class RestaurantResponseDTO {
     this.cgg_code_name = params.cgg_code_name;
     this.tel_no = params.tel_no;
     this.image_url = params.image_url;
+    this.scrapped_by_me = (params as IRestaurant & { scrapped_by_me?: boolean })
+      .scrapped_by_me;
   }
 }

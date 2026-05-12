@@ -96,9 +96,12 @@ export class ResServicesImpl implements RestaurantService {
       throw new Error("목록 조회 중 오류 발생");
     }
   }
-  async getRestaurantById(id: string): Promise<RestaurantResponseDTO | null> {
+  async getRestaurantById(
+    id: string,
+    currentUserId?: string
+  ): Promise<RestaurantResponseDTO | null> {
     try {
-      const restaurant = await this._resRepository.findById(id);
+      const restaurant = await this._resRepository.findById(id, currentUserId);
       //console.log("service:::", restaurant);
       if (!restaurant) {
         throw new HttpException(404, "해당 음식점을 찾을 수 없습니다.");

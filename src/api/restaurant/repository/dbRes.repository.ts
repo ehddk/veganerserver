@@ -147,19 +147,35 @@ export class DbRestaurantRepository implements RestuarantRepository {
     return itemResult.rows;
   }
 
-  async findById(id: string): Promise<IRestaurant> {
+  async findById(
+    id: string,
+    currentUserId?: string
+  ): Promise<IRestaurant> {
     const query = `
-        SELECT 
-         id,
-         upso_name,rdn_code,source_type,category,ctfc_gbn_name,cgg_code_name,tel_no,image_url
-        FROM
-         restaurants
-        WHERE id = $1
-         
+        SELECT
+         r.id,
+         r.upso_name,
+         r.rdn_code,
+         r.source_type,
+         r.category,
+         r.ctfc_gbn_name,
+         r.cgg_code_name,
+         r.tel_no,
+         r.image_url,
+         CASE
+           WHEN $2::uuid IS NULL THEN false
+           ELSE EXISTS (
+             SELECT 1 FROM scrap
+             WHERE scrap.restaurant_id = r.id
+               AND scrap.user_id = $2::uuid
+           )
+         END AS scrapped_by_me
+        FROM restaurants r
+        WHERE r.id = $1
     `;
 
     try {
-      const result = await this.pool.query(query, [id]);
+      const result = await this.pool.query(query, [id, currentUserId ?? null]);
       return result.rows[0];
     } catch (error) {
       console.error("failed", error);

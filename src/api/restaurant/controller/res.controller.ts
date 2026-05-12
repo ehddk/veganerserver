@@ -41,9 +41,13 @@ export class RestaurantController {
     next: NextFunction
   ) {
     const { id } = req.params;
+    const currentUserId = req.user?.userId;
 
     try {
-      const values = await this._resService.getRestaurantById(id);
+      const values = await this._resService.getRestaurantById(
+        id,
+        currentUserId
+      );
       res.status(200).json(values);
     } catch (error) {
       throw new HttpException(404, "음식점 조회 중 오류 발생");
