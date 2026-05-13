@@ -15,7 +15,7 @@ Node.js(Express) + PostgreSQL 기반으로 식당·리뷰·게시글·인증·�
 ## 🔗 링크
 
 - **🌐 라이브 API**: https://veganerserver.onrender.com
-- **📂 프론트엔드 레포**: https://github.com/ehddk/veganerweb
+- **📂 프론트엔드 레포**: https://github.com/ehddk/webVeganer
 
 ---
 
