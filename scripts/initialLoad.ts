@@ -5,22 +5,16 @@ import { ResServicesImpl } from "../src/api/restaurant/service/res.service";
 import * as path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_PASSWORD loaded (should be 9147):", process.env.DB_PASSWORD);
-// const dbPool = new Pool({
-//   user: process.env.DB_USER,
-//   host: process.env.DB_HOST,
-//   database: process.env.DB_NAME,
-//   password: process.env.DB_PASSWORD,
-//   port: parseInt(process.env.DB_PORT || "5432"),
-//   ssl: { rejectUnauthorized: false },
-// });
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set in environment variables");
+}
+
 const dbPool = new Pool({
-  connectionString:
-    "postgresql://postgres.slylgxgwbajzsgcolkzk:veganer1120!@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres",
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 30000, // ✅ 추가
-  idleTimeoutMillis: 60000, // ✅ 추가
+  connectionTimeoutMillis: 30000,
+  idleTimeoutMillis: 60000,
   max: 5,
 });
 
