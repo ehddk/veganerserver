@@ -69,17 +69,32 @@ export class RestaurantController {
         upso_name,
         /**도로명주소 */
         rdn_code,
+        /**업종/카테고리 */
+        category,
+        /**자치구명 */
+        cgg_code_name,
+        /**전화번호 */
+        tel_no,
       } = req.body;
+
+      if (!upso_name || !rdn_code) {
+        throw new HttpException(400, "업소명과 주소는 필수입니다.");
+      }
+
       const values = await this._resService.createRestaurant({
         upso_name,
         rdn_code,
+        category,
+        cgg_code_name,
+        tel_no,
 
         /* open API인지 사용자인지 */
         source_type: "USER",
       });
-      res.status(200).json(values);
+      res.status(201).json(values);
     } catch (error) {
-      throw new HttpException(404, "음식점 조회 중 오류 발생");
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(500, "음식점 생성 중 오류 발생");
     }
   }
 }

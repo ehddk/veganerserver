@@ -64,8 +64,8 @@ export class DbRestaurantRepository implements RestuarantRepository {
   }
   async save(restaurant: Omit<IRestaurant, "id">): Promise<IRestaurant> {
     const query = `
-         INSERT INTO restaurants (upso_name,rdn_code,source_type,ctfc_gbn_name,cgg_code_name,tel_no)
-         VALUES ($1, $2, $3, $4, $5, $6)
+         INSERT INTO restaurants (upso_name,rdn_code,source_type,ctfc_gbn_name,cgg_code_name,tel_no,category,latitude,longitude)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                  RETURNING *
         `;
 
@@ -76,6 +76,9 @@ export class DbRestaurantRepository implements RestuarantRepository {
       restaurant.ctfc_gbn_name,
       restaurant.cgg_code_name,
       restaurant.tel_no,
+      restaurant.category,
+      restaurant.latitude,
+      restaurant.longitude,
     ]);
     return result.rows[0];
   }
@@ -140,7 +143,8 @@ export class DbRestaurantRepository implements RestuarantRepository {
   }
 
   async findAll(): Promise<IRestaurant[]> {
-    const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점'`;
+    // 공식 채식음식점 + 사용자가 직접 등록한 식당(source_type='USER')을 함께 노출
+    const itemsQuery = ` SELECT *, image_url FROM restaurants WHERE ctfc_gbn_name = '채식음식점' OR source_type = 'USER'`;
 
     const itemResult = await this.pool.query(itemsQuery, []);
 
@@ -162,6 +166,8 @@ export class DbRestaurantRepository implements RestuarantRepository {
          r.cgg_code_name,
          r.tel_no,
          r.image_url,
+         r.latitude,
+         r.longitude,
          CASE
            WHEN $2::uuid IS NULL THEN false
            ELSE EXISTS (

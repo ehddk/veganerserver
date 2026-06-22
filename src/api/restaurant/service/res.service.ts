@@ -114,21 +114,91 @@ export class ResServicesImpl implements RestaurantService {
   async createRestaurant(
     restaurant: Pick<
       IRestaurant,
-      "upso_name" | "category" | "rdn_code" | "source_type"
+      | "upso_name"
+      | "category"
+      | "rdn_code"
+      | "source_type"
+      | "cgg_code_name"
+      | "tel_no"
     >
   ): Promise<RestaurantResponseDTO> {
     try {
+      // 도로명주소를 좌표로 변환 (실패해도 등록은 진행, 지도는 주소 기반으로 폴백)
+      const coords = await this.geocodeAddress(restaurant.rdn_code);
+
       const newRestauantData = {
         ...restaurant,
-        // source_id: null,
-        latitude: 0,
-        longitude: 0,
-        ctfc_gbn_name: "USER",
+        latitude: coords?.lat ?? 0,
+        longitude: coords?.lon ?? 0,
+        // 목록(findAll)이 '채식음식점'을 기준으로 노출하므로 동일 값으로 저장.
+        // 공식 데이터와의 구분은 source_type='USER'로 한다.
+        ctfc_gbn_name: "채식음식점",
       };
       const newRestaurant = await this._resRepository.save(newRestauantData);
       return new RestaurantResponseDTO(newRestaurant);
     } catch (error) {
+      console.error("createRestaurant error:", error);
       throw new Error("음식점 생성 중 오류 발생");
     }
+  }
+
+  /**
+   * 도로명주소 → 위경도 변환. (OSM Nominatim, 키 불필요)
+   * 프론트 지도(LeafletMap)와 동일한 OSM 스택을 사용한다.
+   * 실패 시 null 을 반환하고 등록 자체는 막지 않는다.
+   */
+  private async geocodeAddress(
+    address?: string
+  ): Promise<{ lat: number; lon: number } | null> {
+    if (!address || address.trim() === "") return null;
+
+    const variants = this.buildAddressVariants(address);
+    for (const query of variants) {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&limit=1&countrycodes=kr`;
+        const res = await fetch(url, {
+          headers: {
+            "Accept-Language": "ko",
+            // Nominatim 이용약관상 식별 가능한 User-Agent 권장
+            "User-Agent": "veganer-app/1.0 (restaurant-geocoding)",
+          },
+        });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          return {
+            lat: parseFloat(data[0].lat),
+            lon: parseFloat(data[0].lon),
+          };
+        }
+      } catch (e) {
+        console.error("geocode failed for", query, e);
+      }
+    }
+    return null;
+  }
+
+  private buildAddressVariants(raw: string): string[] {
+    const CITY_REGEX =
+      /(서울특별시|부산광역시|대구광역시|인천광역시|광주광역시|대전광역시|울산광역시|세종특별자치시|경기도|강원도|강원특별자치도|충청북도|충청남도|전라북도|전북특별자치도|전라남도|경상북도|경상남도|제주특별자치도)/;
+    const DISTRICT_REGEX = /(\S+?[구시군])/;
+    const ROAD_REGEX = /(\S*?[로길])\s*(\d+(?:-\d+)?)/;
+
+    const city = raw.match(CITY_REGEX)?.[1];
+    const district = raw.match(DISTRICT_REGEX)?.[1];
+    const roadMatch = raw.match(ROAD_REGEX);
+    const road = roadMatch?.[1];
+    const num = roadMatch?.[2];
+
+    const variants: string[] = [];
+    if (city && district && road && num)
+      variants.push(`${city} ${district} ${road} ${num}`);
+    if (district && road && num) variants.push(`${district} ${road} ${num}`);
+    if (road && num) variants.push(`${road} ${num}`);
+    variants.push(raw);
+
+    return Array.from(new Set(variants));
   }
 }
