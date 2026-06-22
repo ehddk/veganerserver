@@ -66,6 +66,7 @@ export class DbArticleRepository implements ArticleRepository {
         title,
         content,
         TRIM(author) as author,
+        author_id,
         "createdAt",
         "updatedAt",
         view_count as "viewCount"
