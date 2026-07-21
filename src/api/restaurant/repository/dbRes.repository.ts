@@ -4,9 +4,6 @@ import { RestuarantRepository } from "./res.repository";
 import { Pool } from "pg";
 const { createClient } = require("@supabase/supabase-js");
 
-console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
-console.log("SERVICE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY);
-
 export class DbRestaurantRepository implements RestuarantRepository {
   private readonly pool: Pool;
   constructor(dbPool: Pool) {
@@ -151,10 +148,7 @@ export class DbRestaurantRepository implements RestuarantRepository {
     return itemResult.rows;
   }
 
-  async findById(
-    id: string,
-    currentUserId?: string
-  ): Promise<IRestaurant> {
+  async findById(id: string, currentUserId?: string): Promise<IRestaurant> {
     const query = `
         SELECT
          r.id,
